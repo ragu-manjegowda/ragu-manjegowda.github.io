@@ -11,12 +11,12 @@
 # (Using that method instead of site.owner, in case your posts get cloned with your repo.)
 
 # Site settings
-title: _site name_
-description: _description_
+title: Welcome
+description: Ragu's personal portfolio
 owner:
-  name: _your name_ # or company name
-  url: "http://example.com" # your URL
-first_published: 2010 # if migrating another site, the year of your first publish
+  name: Raghavendra Manjegowda # or company name
+  url: "https://ragu-manjegowda.github.io" # your URL
+first_published: 2019 # if migrating another site, the year of your first publish
                       # Must be a 4-digit integer year (math is used on it)
 url: "http://example.com" # the base hostname & protocol for this site
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -28,20 +28,28 @@ lang: en-us # used in HTML lang attributes
 # on landing page
 # - set the greeting only if you want to display the first green section
 greeting:
-  title: _Your greeting_  
-  text: _Your detailed greeting text_
+  title: Few words about this website
+  text: First of all, thank you for stopping by. I had a wordpress website which I built in 2016 hosted on digital ocean that I rented for my IOT projects. Creating this website in github with free theme, free hosting and free domain name since I am getting rid of my digital ocean droplet. Thanks to open source community! Copying below what I had in my previous website on why I built this.
+
+I am not geek or tech savvy, neither I have someone to chat overnight on Whatsapp! Living several continents away from parents, it was very difficult to keep myself occupied. Movies were the only thing I had, to rescue my idle mind from being devil's workshop! I ended up watching most of the latest movies and my other favorite movies more than 20 times each in 2 years (Believe me, I used to watch at least 2 movies even on a weekday!).
+
+It all started in July 2016, when I seriously made my mind to get started with something really cool! I had a plan to build an end to end IOT project, so I went ahead and bought a Raspberry Pi (to do some sensor related stuff) and also rented a virtual machine (to collect data from RPi and display it to audience). Since I had Virtual Machine with public facing IP thought of making a portfolio and got my domain name registered!
+
+In short, this website is a beautiful bi-product of my boredom!! (LOL)
+Please visit Projects page to know more about my IOT project!
+
 # - displayed at the bottom
-closing-head: _Your closing_
-closing-para: _Your detailed closing_
+closing-head: Thank you
+closing-para: Thanks for your precious time and interest in knowing about my work, please feel free to get in touch to discuss about my projects or anything that's worth discussing!
 
 # on all pages (and the first three you list display with greeting, if included)
 social:
-  twitter: https://twitter.com/_username_
-  github: https://github.com/_username_
-  linkedin-square: https://linkedin.com/in/_username_
-  facebook-official: https://facebook.com/_username_
-  #google-plus-square: https://plus.google.com/u/0/+_username_
+  twitter: https://twitter.com/ragu_manjegowda
+  github: https://github.com/ragu-manjegowda
+  linkedin-square: https://linkedin.com/in/ragumanjegowda
   email: /contact/ # you can configure and use this contact page or use your email addy
+  #facebook-official: https://facebook.com/_username_
+  #google-plus-square: https://plus.google.com/u/0/+_username_
   #flickr:
   #instagram:
   #youtube-square:
