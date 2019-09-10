@@ -2,6 +2,18 @@
 {% include topcomment.html %}
 <html lang="{{ site.lang }}">
 
+<HEAD>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-147567345-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-147567345-1');
+</script>
+</HEAD>
+
   {% include head.html %}
 
   <body class="landing">
@@ -16,11 +28,6 @@
             <div class="inner">
               <h1>{{ site.title }}</h1>
               <p>{{ site.description }}</p>
-              <!--
-              <ul class="actions">
-                <li><a href="#" class="button special">Activate</a></li>
-              </ul>
-              -->
             </div>{%
             if site.greeting %}
             <a href="#greeting" class="more scrolly">Continue</a>{%
@@ -28,38 +35,12 @@
             <a href="#landing_pages" class="more scrolly">Continue</a>{%
             endif %}
           </section>
-          {%
-          if site.greeting %}
-        <!-- One -->
-          <section id="greeting" class="wrapper style1 special">
-            <div class="inner">
-              <header class="major">
-                <h2>{% if site.greeting.title %}{{ site.greeting.title }}{% else %}{{ site.title }}{% endif %}</h2>
-                <p>{% if site.greeting.text %}{{ site.greeting.text | markdownify }}{% else %}{{ site.description | markdownify }}{% endif %}</p>
-              </header>
-              <ul class="icons major">{%
-              for socloc in site.social limit:3 %}{%
-                if socloc[1] %}{%
-                  if socloc[0] == 'email' %}
-                <li><a target="_blank" href="{%
-                    if socloc[1] contains '@' %}mailto:{{ socloc[1] }}{%
-                    else %}{{ socloc[1] }}{%
-                    endif %}" class="icon fa-envelope major style1"
-                       ><span class="label">E-mail</span></a></li>{%
-                  else %}
-                <li><a target="_blank" href="{{ socloc[1] }}" class="icon fa-{{ socloc[0] }} major style{% cycle 1, 2, 3 %}"
-                       ><span class="label">{{ socloc[0] }}</span></a></li>{%
-                  endif %}{%
-                endif %}{%
-              endfor %}
-              </ul>
-            </div>
-          </section>{%
-          endif %}
 
-        <!-- Two -->
+
+
+        <!-- Pages -->
           <section id="landing_pages" class="wrapper alt style2">{%
-            assign sorted_pages = site.pages | sort:"id" %}{%
+            assign sorted_pages = site.pages | sort:'key','last' %}{%
             for my_page in sorted_pages %}{%
               if my_page.title %}{%
                 unless my_page.options contains 'nolanding' %}
@@ -83,8 +64,8 @@
             endfor %}
           </section>
 
-        <!-- Three -->{%
-      if site.tags.featured %}
+        <!-- Featured (not using) -->
+        {% if site.tags.featured %}
           <section id="landing_features" class="wrapper style3 special">
             <div class="inner">
               <header class="major">
