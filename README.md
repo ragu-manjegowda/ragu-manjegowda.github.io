@@ -12,7 +12,7 @@ data from a database at runtime).
 This repo is the exact same code I use for my site (excluding my posts and
 some data files created from templates where noted).
 
-- [Features](https://arkadianriver.github.io/arkadianriver.com/topics/user-guide/features.html)
+- [Features](https://arkadianriver.github.io/arkadianriver.com/blog/user-guide/features.html)
 - [Authoring Guide](https://arkadianriver.github.io/arkadianriver.com/topics/user-guide/)
 
 ## If you like it
