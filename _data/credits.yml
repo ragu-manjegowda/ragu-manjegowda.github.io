@@ -88,6 +88,8 @@ creds:
     lic : mit
 #
 inspiration:
+  - name : Kavaledurga
+    url  : https://en.wikipedia.org/wiki/Kavaledurga
   - name : Michael Rose
     url  : https://github.com/mmistakes
   - name : David Ollerhead
