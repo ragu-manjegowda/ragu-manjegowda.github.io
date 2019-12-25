@@ -1,5 +1,6 @@
 # Jekyll ignores
 .jekyll-metadata
+.jekyll-cache/
 .sass-cache/
 _site/
 _drafts/
