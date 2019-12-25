@@ -88,8 +88,6 @@ creds:
     lic : mit
 #
 inspiration:
-  - name : Kavaledurga
-    url  : https://en.wikipedia.org/wiki/Kavaledurga
   - name : Michael Rose
     url  : https://github.com/mmistakes
   - name : David Ollerhead
@@ -109,16 +107,9 @@ other-image-credit: All other images are public domain.
 # 'lic' values correspond to the keys in the license hash above
 #
 image-credit:
-  - src : /images/caustic_light.jpg
+  - src : /images/banner.jpg
+    url  : https://en.wikipedia.org/wiki/Kavaledurga
+  - src : /images/causticLight.jpg
     by  : fdecomite
     url : https://www.flickr.com/photos/fdecomite/1907376527/
     lic : ccb2
-  - src : /images/flickr-froderik.jpg
-    by  : froderik
-    url : https://www.flickr.com/photos/froderik/9355090806/
-    lic : ccbsa2
-  - src : /images/banner.jpg
-    by  : Konstaninos Dafallas
-    url : https://www.flickr.com/photos/72906133@N00/4011647045/
-    lic : ccb2
-
