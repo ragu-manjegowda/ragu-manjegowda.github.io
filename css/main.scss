@@ -1147,17 +1147,13 @@ $baseurl: '{{ site.baseurl }}/images';
 		}
 		&:nth-child(1n) {
 			text-align: right;
+			background: linear-gradient(-30deg,rgb(0,0,0), transparent);
+
 		}
 		&:nth-child(2n) {
 			@include vendor('flex-direction', 'row-reverse');
 			text-align: left;
-		}
-
-		@for $i from 1 through _misc(max-spotlights) {
-			$j: 0.075 * $i;
-			&:nth-child(#{$i}) {
-				background-color: rgba(0,0,0, $j);
-			}
+			background: linear-gradient(30deg,rgb(0,0,0), transparent);
 		}
 
 		@include breakpoint(large) {
