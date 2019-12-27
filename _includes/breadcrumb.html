@@ -6,7 +6,7 @@
     assign lastcat = page.categories | last %}{%
     for cat in page.categories %}{%
       unless page.permalink and cat == lastcat %}{%
-        capture urlstr %}{{ urlstr }}/{{ cat }}{% endcapture %}
+        capture urlstr %}/{{ cat }}{% endcapture %}
   <li style="text-transform: capitalize;"><a href="{{ site.baseurl }}{{ urlstr }}">{{ cat }}</a></li>{%  endunless %}{%
     endfor %}
   <li>{{ page.title }}</li>{%
