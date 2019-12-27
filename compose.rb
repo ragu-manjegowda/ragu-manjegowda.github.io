@@ -48,7 +48,7 @@ to accept the default you can just hit return.)
 
 This site has two types of posts:
 - Blog: blog posts
-- Works: portfolio entries
+- Projects: portfolio entries
 
 eoh
 type = ''
@@ -61,7 +61,7 @@ end
 
 categories = Array.new
 if type=='w'
-  categories << 'works'
+  categories << 'projects'
   puts <<-eoh
 
 Higher priority works are listed first and also get the same priority value
