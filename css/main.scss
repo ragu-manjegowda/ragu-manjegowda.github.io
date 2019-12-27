@@ -1115,6 +1115,10 @@ $baseurl: '{{ site.baseurl }}/images';
    	@include vendor('align-items', 'center');
 		 @include vendor('display', 'flex');
 		 height: 45vh;
+		 padding-left: 2em;
+		 padding-right: 2em;
+		 padding-top: 2em;
+		 height: auto;
 		 
 		a {
 			padding:0;
@@ -1133,6 +1137,7 @@ $baseurl: '{{ site.baseurl }}/images';
 			@include vendor('order', '1');
 			border-radius: 0;
 			width: 40%;
+			padding-bottom: 2em;
 			img {
 				border-radius: 0;
 				width: 100%;
@@ -1149,13 +1154,11 @@ $baseurl: '{{ site.baseurl }}/images';
 		&:nth-child(1n) {
 			text-align: right;
 			background: linear-gradient(-30deg,rgb(0,0,0), transparent);
-			padding-right: 2em;
 		}
 		&:nth-child(2n) {
 			@include vendor('flex-direction', 'row-reverse');
 			text-align: left;
 			background: linear-gradient(30deg,rgb(0,0,0), transparent);
-			padding-left: 2em;
 		}
 
 		@include breakpoint(large) {
