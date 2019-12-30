@@ -1,7 +1,7 @@
 ---
 priority: 0.6
 title: Heart Rate Measurement Device
-excerpt: using IR sensors.
+excerpt: using IR sensors
 categories: projects
 background-image: heartRate.jpg
 tags:
