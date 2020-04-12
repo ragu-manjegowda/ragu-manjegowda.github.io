@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/ragu-manjegowda/ragu-manjegowda.github.io.svg?branch=master)](https://travis-ci.org/ragu-manjegowda/ragu-manjegowda.github.io)
+[![Website ragu-manjegowda.github.io](https://img.shields.io/website-up-down-green-red/http/ragu-manjegowda.github.io.svg)](https://ragu-manjegowda.github.io/)
+[![powered by Jekyll](https://img.shields.io/badge/powered_by-Jekyll-green.svg)](https://jekyllrb.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 # ragu-manjegowda.github.io
 
 Ragu's personal web site, using the design of http://html5up.net/spectral 
