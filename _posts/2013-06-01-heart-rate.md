@@ -20,7 +20,7 @@ Heart rate is measured by reading LED pulses reflected back from human finger an
 
 ### Block diagram:
 
-{% include post_picwrap.html pos="fit" src="/images/blockDiagram.png" %}
+{% include post_picwrap.html pos="fit" src="/images/blockDiagram.png" alt = "ImageMissing!" %}
 
 ### Technical explanation:
 

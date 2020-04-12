@@ -26,31 +26,15 @@ baseurl: "" # the subpath of your site, e.g. /blog
             # besides this blog.
 lang: en-us # used in HTML lang attributes
 
-# on landing page
-# - set the greeting only if you want to display the first green section
-#greeting:
-#  title: Welcome, few words about this website...
-#  text: |
-#    First of all, thanks for stopping by. I had built a wordpress website in 2016 and hosted it on digital ocean droplet that I rented for my IOT projects. Since I am getting rid of my digital ocean droplet I decided to create this website which is hosted on github for FREE. Copying below what I had in my previous website about why I ever wanted to build a website.
-#
-#    "I am not geek or tech savvy, neither I have someone to chat overnight on Whatsapp! Living several continents away from parents, it was very difficult to keep myself occupied. Movies were the only thing I had, to rescue my idle mind from being devil's workshop! I ended up watching most of the latest movies and my other favorite movies more than 20 times each in 2 years (Believe me, I used to watch at least 2 movies even on a weekday!).
-#
-#    It all started in July 2016, when I seriously made my mind to get started with something really cool! I had a plan to build an end to end IOT project, so I went ahead and bought a Raspberry Pi (to do some sensor related stuff) and also rented a virtual machine (to collect data from RPi and display it to audience). Since I had Virtual Machine with public facing IP thought of making a portfolio and got my domain name registered!
-#
-#    In short, this website is a beautiful bi-product of my boredom!! (LOL)
-#
-#    Please visit Projects page to know more about my IOT project!"
-
 # - displayed at the bottom
 closing-head: Thank you
 closing-para: Thanks for your precious time and interest in knowing about my work, please feel free to get in touch to discuss about my projects or anything that's worth discussing!
 
-# on all pages (and the first three you list display with greeting, if included)
 social:
   linkedin-square: https://linkedin.com/in/ragumanjegowda
   github: https://github.com/ragu-manjegowda
   twitter: https://twitter.com/ragu_manjegowda
-  email: raghavendra.manjegowda@gmail.com # you can configure and use this contact page or use your email addy
+  email: raghavendra.manjegowda@gmail.com 
   #facebook-official: https://facebook.com/_username_
   #google-plus-square: https://plus.google.com/u/0/+_username_
   #flickr:
