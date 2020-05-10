@@ -18,7 +18,7 @@ You can simply check commits to see the build status.
 To preview as you build locally,  
 From the repo's root directory
 ```
-RUBYOPT='-W0' bundle exec jekyll serve --future --drafts
+RUBYOPT='-W0' bundle exec jekyll serve --future --drafts --incremental
 ```
 
 Open a browser to http://localhost:4000 (or the port number that jekyll 
