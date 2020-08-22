@@ -12,4 +12,3 @@ bundle exec htmlproofer ./_site --disable-external
 
 # Serve on localhost
 RUBYOPT='-W0' bundle exec jekyll serve --future --drafts --incremental
-

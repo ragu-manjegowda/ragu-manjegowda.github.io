@@ -4,7 +4,7 @@ rvm:
 
 # Bundler is being used, therefore the `install` step will 
 # run `bundle install` by default.
-script: ./script/ciBuild.sh
+script: ./scripts/ciBuild.sh
 
 env:
   global:
