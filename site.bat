@@ -34,12 +34,12 @@ goto :eof
 
 :serve
 set JEKYLL_ENV=development
-call bundle exec jekyll serve %JKL_MYCONFIGS% --watch --drafts --future
+call bundle exec jekyll serve %JKL_MYCONFIGS% --watch
 goto :done
 
 :nofuture
 set JEKYLL_ENV=development
-call bundle exec jekyll serve %JKL_MYCONFIGS% --watch --drafts
+call bundle exec jekyll serve %JKL_MYCONFIGS% --watch
 goto :done
 
 :prod

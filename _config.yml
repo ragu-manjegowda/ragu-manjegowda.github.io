@@ -115,10 +115,6 @@ defaults:
       path: _posts
     values:
       layout: post
-  - scope:
-      path: _drafts
-    values:
-      layout: post
 
 # to initialize arrays in assignments (assign myarr = site.empty_array)
 # (easier to grok than assign myarr = '' | split',')
