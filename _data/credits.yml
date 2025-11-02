@@ -52,11 +52,11 @@ licenses:
 creds:
   - for : Design and theme
     by  : '@ajlkn'
-    url : http://html5up.net/spectral
+    url : https://html5up.net/spectral
     lic : ccb3
   - for : Mods for a Jekyll blog
     by  : arkadianriver
-    url : http://arkadianriver.com
+    url : https://arkadianriver.com
     lic : mit
   - for : Icons
     by  : Dave Gandy
@@ -64,11 +64,11 @@ creds:
     lic : mit
   - for : Syntax-highlighting
     by  : Pygments.org
-    url : http://pygments.org
+    url : https://pygments.org
     lic : mit
   - for : Lora font
     by  : Cyreal
-    url : http://www.cyreal.org
+    url : https://www.cyreal.org
     lic : sil
   - for : OpenSans font
     by  : Google
@@ -80,7 +80,7 @@ creds:
     lic : mit
   - for : jQuery validation
     by  : Jörn Zaefferer
-    url : http://jqueryvalidation.org/
+    url : https://jqueryvalidation.org/
     lic : mit
   - for : jQuery
     by  : jQuery Foundation
