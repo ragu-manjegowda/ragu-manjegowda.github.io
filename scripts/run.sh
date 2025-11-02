@@ -1,41 +1,83 @@
 #!/usr/bin/env bash
 set -e # halt script on error
 
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Default mode
+MODE="docker"
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --docker|-d)
+      MODE="docker"
+      shift
+      ;;
+    --local|-l)
+      MODE="local"
+      shift
+      ;;
+    --help|-h)
+      echo "Usage: $0 [--docker|-d] [--local|-l] [--help|-h]"
+      echo ""
+      echo "Options:"
+      echo "  --docker, -d    Use Docker to build and serve (default)"
+      echo "  --local, -l     Use local Ruby/Jekyll installation"
+      echo "  --help, -h      Show this help message"
+      exit 0
+      ;;
+    *)
+      echo -e "${RED}Unknown option: $1${NC}"
+      echo "Use --help for usage information"
+      exit 1
+      ;;
+  esac
+done
+
+# Verify we're in the right directory
+if [ ! -f ./compose.rb ]; then
+    echo -e "${RED}Make sure you are in repo's root directory!${NC}"
+    exit 1
+fi
+
 # Delete old build
 rm -rf ./_site
 
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+echo -e "${GREEN}Build mode: ${YELLOW}$MODE${NC}"
 
-if [ ! -f ./compose.rb ];
-then
-    echo -e "${RED}Make sure you are in repo's root directory!${NC}"
-    exit
-fi
+if [ "$MODE" = "docker" ]; then
+    echo "Building with Docker..."
 
-echo "Trying to build with docker..."
-
-# If docker is installed
-if ! command -v docker &> /dev/null
-then
-    echo -e "${RED}docker could not be found!${NC}\n\n"
-else
-    if ! docker stats --no-stream &> /dev/null
-    then
-        echo -e "${RED}docker deamon is not running, please start docker service${NC}\n\n"
+    # Check if docker is installed
+    if ! command -v docker &> /dev/null; then
+        echo -e "${RED}Docker could not be found!${NC}"
+        echo -e "${YELLOW}Falling back to local build...${NC}"
+        MODE="local"
+    elif ! docker stats --no-stream &> /dev/null; then
+        echo -e "${RED}Docker daemon is not running, please start docker service${NC}"
+        echo -e "${YELLOW}Falling back to local build...${NC}"
+        MODE="local"
     else
-        docker run --rm -it -p 4000:4000 -v "$PWD:/srv/jekyll" jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
-        exit
+        # Use fixed Docker command with Gemfile.docker for Alpine compatibility
+        docker run --rm -p 4000:4000 -v "$PWD:/srv/jekyll" -e BUNDLE_GEMFILE=Gemfile.docker jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
+        exit 0
     fi
 fi
 
-echo "Trying to build using tools installed natively..."
+if [ "$MODE" = "local" ]; then
+    echo "Building with local Ruby/Jekyll..."
 
-# If bundle is installed locally
-if ! command -v bundler &> /dev/null
-then
-    echo -e "${RED}bundler could not be found${NC}\n\n"
-else
+    # Check if bundler is installed locally
+    if ! command -v bundler &> /dev/null; then
+        echo -e "${RED}Bundler could not be found${NC}"
+        echo -e "${YELLOW}Please install Ruby and Bundler first${NC}"
+        exit 1
+    fi
+
     # Build site
     bundle exec jekyll build
 
@@ -43,9 +85,10 @@ else
     bundle exec htmlproofer ./_site --disable-external
 
     # Serve on localhost
-    bundle exec jekyll serve --incremental
+    bundle exec jekyll serve --incremental --host "0.0.0.0"
 
-    exit
+    exit 0
 fi
 
-echo -e "${RED}Please follow README.md for instructions${NC}"
+echo -e "${RED}Build failed. Please follow README.md for setup instructions${NC}"
+exit 1

@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+gem 'jekyll', '>= 4.3.2'
+gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+gem 'html-proofer'
+
+# Use sassc instead of sass-embedded for Alpine Linux compatibility
+gem 'sassc', '~> 2.1'
+gem 'jekyll-sass-converter', '~> 2.0'

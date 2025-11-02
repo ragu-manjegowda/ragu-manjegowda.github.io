@@ -18,8 +18,11 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
         From the repo's root directory run,
 
         ```
-        $ docker run --rm -it -p 4000:4000 -v "$PWD:/srv/jekyll" jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
+        $ docker run --rm -it -p 4000:4000 -v "$PWD:/srv/jekyll" -e BUNDLE_GEMFILE=Gemfile.docker jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
         ```
+
+        Note: Uses `Gemfile.docker` with `sassc` for Alpine Linux compatibility (avoids `sass-embedded` issues).
+
         Open a browser and navigate to http://0.0.0.0:4000
 
    - b. Native
