@@ -27,8 +27,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 lang: en-us # used in HTML lang attributes
 
 # - displayed at the bottom
-closing-head: Thank you
-closing-para: Thanks for your precious time and interest in knowing about my work, please feel free to get in touch to discuss about my projects or anything that's worth discussing!
+closing-head: Let's Connect
+closing-para: I appreciate you taking the time to explore my work and projects. Whether you'd like to collaborate, discuss innovative ideas, or simply connect, I'd love to hear from you. Let's create something amazing together!
 
 social:
   linkedin-square: https://linkedin.com/in/ragumanjegowda
