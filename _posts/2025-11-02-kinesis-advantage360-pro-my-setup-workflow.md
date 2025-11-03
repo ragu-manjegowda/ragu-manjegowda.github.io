@@ -154,5 +154,4 @@ The key insight: **every** interaction should be deliberate and fast. Rather tha
 
 This configuration isn't just about avoiding the mouse - it's about creating an environment where the tools disappear and you can focus entirely on the work itself.
 
-*Next up in the series → [Colemak Mod-DH: The Typing Layout That Changed Everything](#)*  
-
+{% include series_nav.html %}

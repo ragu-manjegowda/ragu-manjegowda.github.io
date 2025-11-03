@@ -3,7 +3,7 @@ title: "Colemak Mod-DH: The Typing Layout That Changed Everything"
 tags: [keyboard, ergonomic, colemak, mod-dh, layout, vim, hjkl, touch-typing]
 categories: blog
 background-image: colemak-mod-dh-ansi.png
-series: "Keyboard-Driven Development"
+series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 3
 excerpt: "Why I chose the Colemak Mod-DH layout over newer options like Gallium or Graphite, and how it perfectly aligns with a Linux-first, vim-centric, keyboard-driven workflow."
@@ -143,5 +143,4 @@ pick something stable, logical, and well-documented — then *build your workflo
 You don’t need the “most optimal” layout.  
 You need the one that feels invisible — the one that lets your thoughts reach the screen without translation.
 
-*Next up in the series → [tmux: Terminal Multitasking Without Limits](#)*
-
+{% include series_nav.html %}

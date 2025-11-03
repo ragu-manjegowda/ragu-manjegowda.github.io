@@ -374,8 +374,4 @@ The configuration transforms tmux from a basic terminal multiplexer into a compr
 
 ---
 
-{% include series_navigation.html %}
-
-**Next in this series:**  
-→ *"Building a Consistent Editor Experience: Neovim as the Development Core"*
-
+{% include series_nav.html %}

@@ -1,0 +1,41 @@
+{% comment %}
+Dynamic Series Navigation
+Finds previous/next posts based on series and series_order
+{% endcomment %}
+
+{% if page.series and page.series_order %}
+  {% assign series_posts = site.posts | where: "series", page.series | sort: "series_order" %}
+  {% assign current_order = page.series_order %}
+  {% assign series_size = series_posts.size %}
+  
+  {% if series_size > 1 %}
+    {% assign prev_post = null %}
+    {% assign next_post = null %}
+    {% assign prev_order = current_order | minus: 1 %}
+    {% assign next_order = current_order | plus: 1 %}
+    
+    {% comment %}Find previous and next posts by comparing series_order{% endcomment %}
+    {% for post in series_posts %}
+      {% if post.series_order == prev_order %}
+        {% assign prev_post = post %}
+      {% endif %}
+      {% if post.series_order == next_order %}
+        {% assign next_post = post %}
+      {% endif %}
+    {% endfor %}
+
+<div class="series-navigation">
+  <h4>{{ page.series_title | default: "Keyboard-Driven Development" }} Series</h4>
+  <p>Part {{ current_order }} of {{ series_size }}</p>
+  <div class="nav-links">
+    {% if prev_post %}
+    <a href="{{ prev_post.url | relative_url }}">← Previous: {{ prev_post.title | truncatewords: 3, "" }}</a>
+    {% endif %}
+    {% if next_post %}
+    <a href="{{ next_post.url | relative_url }}">Next: {{ next_post.title | truncatewords: 3, "" }} →</a>
+    {% endif %}
+  </div>
+</div>
+
+  {% endif %}
+{% endif %}

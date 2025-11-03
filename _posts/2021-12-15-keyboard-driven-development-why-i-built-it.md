@@ -113,4 +113,4 @@ If you’ve ever felt the fatigue of modern computing, or the friction of switch
 
 ---
 
-*Next in the series → [The Kinesis Advantage360 Pro: My Setup and Workflow](#)*
+{% include series_nav.html %}
