@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e # halt script on error
 
-# Build Site
+# Set Jekyll environment to production
+export JEKYLL_ENV=production
+
+# Build Site for production
 bundle exec jekyll build --incremental
 
 # Lint html
