@@ -78,6 +78,14 @@ if [ "$MODE" = "local" ]; then
         exit 1
     fi
 
+    # Install dependencies only if gems are not installed
+    if ! bundle check &> /dev/null; then
+        echo "Installing gems via bundle install..."
+        bundle install
+    else
+        echo -e "${GREEN}✓ Gems already installed${NC}"
+    fi
+
     # Build site
     bundle exec jekyll build
 
