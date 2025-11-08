@@ -89,6 +89,28 @@ The keyboard is organized into 5 main layers, each serving a specific purpose in
 - **Mod Layer** (`lt 3`): Mouse emulation and navigation controls
 - **Symbols Layer** (`lt 4`): Programming symbols, brackets, and special characters
 
+### **Visual Reference: All Layers**
+
+#### Base Layer - Colemak Mod-DH
+
+{% include keyboard_layer.html src="https://raw.githubusercontent.com/ragu-manjegowda/colemak-mod-dh-ansi/V3.0/assets/base_layer.png" alt="Base Layer - Colemak Mod-DH" caption="*** Colemak-DH ANSI standard layout ***" %}
+
+#### Keypad Layer - Numeric & Navigation
+
+{% include keyboard_layer.html src="https://raw.githubusercontent.com/ragu-manjegowda/colemak-mod-dh-ansi/V3.0/assets/kp_layer.png" alt="Keypad Layer" caption="*** KP layer modifications ***" %}
+
+#### Function Layer - Media & System
+
+{% include keyboard_layer.html src="https://raw.githubusercontent.com/ragu-manjegowda/colemak-mod-dh-ansi/V3.0/assets/fn_layer.png" alt="Function Layer" caption="*** FN layer modifications ***" %}
+
+#### Modifier Layer - Mouse & Mod Keys
+
+{% include keyboard_layer.html src="https://raw.githubusercontent.com/ragu-manjegowda/colemak-mod-dh-ansi/V3.0/assets/mod_layer.png" alt="Modifier Layer" caption="*** Mod layer modifications ***" %}
+
+#### Symbols Layer - Programming Symbols
+
+{% include keyboard_layer.html src="https://raw.githubusercontent.com/ragu-manjegowda/colemak-mod-dh-ansi/V3.0/assets/sym_layer.png" alt="Symbols Layer" caption="*** Symbol layer modifications ***" %}
+
 ### **Thumb Cluster Strategy**
 The thumb clusters handle the heavy lifting of layer switching and frequently-used functions:
 
