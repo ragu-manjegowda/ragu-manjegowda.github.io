@@ -21,13 +21,10 @@
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
 
 
-  <!--[if lte IE 8]><script src="{{ "/js/ie/html5shiv.js" | prepend: site.baseurl }}"></script><![endif]-->
   <link rel="shortcut icon" href="{{ "/images/favicon.ico" | prepend: site.baseurl }}" type="image/x-icon" />
   <link rel="icon" href="{{ "/images/favicon.ico" | prepend: site.baseurl }}" type="image/x-icon" />
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
-  <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}" />
-  <!--[if lte IE 8]><link rel="stylesheet" href="{{ "/css/ie8.css" | prepend: site.baseurl }}" /><![endif]-->
-  <!--[if lte IE 9]><link rel="stylesheet" href="{{ "/css/ie9.css" | prepend: site.baseurl }}" /><![endif]-->{%
+  <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}" />{%
   if page.background-image %}{%
     assign first_char = page.background-image | slice: 0 %}{%
     if first_char == '/' %}{%
@@ -47,14 +44,7 @@
     background-image: -ms-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
     background-image: linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
   }
-  </style>
-  <!--[if lte IE 9]>
-  <style>
-  #main > header {
-    background-image: url("{{ imageurl }}");
-  }
-  </style>
-  -->{%
+  </style>{%
   endif %}{%
   if page.style-includes %}{%
     for include in page.style-includes %}{%

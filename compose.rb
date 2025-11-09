@@ -8,7 +8,7 @@
 # and all by hand, like jekyll-compose, but specific to this repo.
 #
 
-system Gem.win_platform? ? "cls" : "clear"
+system "clear"
 
 # for getting the name of your editor and extension
 require 'yaml'
@@ -213,7 +213,7 @@ else
     f.puts "#date: " + tstamp
     f.puts "#lastmod: " + tstamp
     f.puts "---"
-    patharg = Gem.win_platform? ? ".\\_drafts\\" + fname : "./_drafts/" + fname
+    patharg = "./_drafts/" + fname
     puts "File created: " + patharg
     # open it in an editor if specified
     if (cfgfile['compose']['editor'])

@@ -62,8 +62,34 @@ if [ "$MODE" = "docker" ]; then
         echo -e "${YELLOW}Falling back to local build...${NC}"
         MODE="local"
     else
-        # Use fixed Docker command with Gemfile.docker for Alpine compatibility
-        docker run --rm -p 4000:4000 -v "$PWD:/srv/jekyll" -e BUNDLE_GEMFILE=Gemfile.docker jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
+        # Use official Jekyll Docker image
+        # Rename lock file temporarily so Docker's Bundler creates its own
+        # This avoids Bundler version conflicts (host 2.7.2 vs Docker 2.3.25)
+        echo "Running Jekyll in Docker..."
+
+        # Function to restore lock file on exit or interrupt
+        restore_lock() {
+            if [ -f Gemfile.lock.host ]; then
+                rm -f Gemfile.lock
+                mv Gemfile.lock.host Gemfile.lock
+                echo "Restored Gemfile.lock"
+            fi
+        }
+        trap restore_lock EXIT INT TERM
+
+        # Temporarily rename host's lock file
+        if [ -f Gemfile.lock ]; then
+            mv Gemfile.lock Gemfile.lock.host
+        fi
+
+        # Run Docker, which will create its own lock file
+        docker run --rm \
+            -p 4000:4000 \
+            -v "$PWD:/srv/jekyll" \
+            -e IO_EVENT_SELECTOR=Select \
+            jekyll/jekyll:latest \
+            sh -c "cd /srv/jekyll && bundle install && jekyll serve --host 0.0.0.0 --watch --incremental"
+
         exit 0
     fi
 fi
@@ -92,7 +118,9 @@ if [ "$MODE" = "local" ]; then
     # Lint html output
     bundle exec htmlproofer ./_site --disable-external
 
-    # Serve on localhost
+    # Serve on localhost with Select-based event selector
+    # (liburing.so.2 may not be available in all environments)
+    export IO_EVENT_SELECTOR=Select
     bundle exec jekyll serve --incremental --host "0.0.0.0"
 
     exit 0
