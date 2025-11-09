@@ -1,11 +1,25 @@
-<span class="image {%
-if include.pos %}{{ include.pos }}{%
-else %}left{%
-endif %}"><img {%
-if include.max %}style="max-width:{{include.max}}px" {%
-endif %}src="{%
-if include.src %}{{ include.src | prepend: site.baseurl }}{%
-else %}{{ '/images/placeHolder.jpg' | prepend: site.baseurl }}{%
-endif %}" alt="{%
-if include.alt %}{{ include.alt }}{%
-endif %}" /></span>
+<style>
+  .layer-image-wrapper {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .layer-image-wrapper img {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+    border-radius: 4px;
+  }
+  
+  .layer-caption {
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+  }
+</style>
+
+<div class="layer-image-wrapper">
+  <img src="{{ include.src | prepend: site.baseurl }}" alt="{{ include.alt }}" />
+  <div class="layer-caption">{{ include.caption }}</div>
+</div>
