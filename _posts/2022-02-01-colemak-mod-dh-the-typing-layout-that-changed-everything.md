@@ -11,10 +11,10 @@ excerpt: "Why I chose the Colemak Mod-DH layout over newer options like Gallium 
 
 ## Why I Needed a Better Layout
 
-When I started building my **keyboard-driven development** environment, my first bottleneck wasn’t hardware — it was **layout**.
+When I started building my **[keyboard-driven development](/blog/keyboard-driven-development-why-i-built-it.html)** environment, my first bottleneck wasn't hardware — it was **layout**.
 
-Even with the Kinesis Advantage360 Pro, my fingers still had to travel too far.  
-QWERTY’s historical baggage — uneven hand load, excessive lateral movement, and poor ergonomic logic — was holding me back.
+Even with the **[Kinesis Advantage360 Pro](/blog/kinesis-advantage360-pro-my-setup-workflow.html)**, my fingers still had to travel too far.  
+QWERTY's historical baggage — uneven hand load, excessive lateral movement, and poor ergonomic logic — was holding me back.
 
 I wanted a layout that:
 1. Reduced strain and finger travel,

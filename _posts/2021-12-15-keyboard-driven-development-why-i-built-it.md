@@ -83,21 +83,19 @@ Each tool fits together like modular hardware — ergonomic at every level, from
 
 ## The Road Ahead
 
-This post kicks off the **Keyboard-Driven Development** series, where I’ll break down each component of the setup in detail:
+This post kicks off the **Keyboard-Driven Development** series, where I'll break down each component of the setup in detail:
 
-1. **Kinesis Advantage360 Pro: My Setup and Workflow**  
+0. **[Keyboard-Driven Development: Why I Built It](/blog/keyboard-driven-development-why-i-built-it.html)** *(this post)*  
+   The philosophy and vision behind the keyboard-driven workflow.
+1. **[Kinesis Advantage360 Pro: My Setup and Workflow](/blog/kinesis-advantage360-pro-my-setup-workflow.html)**  
    Custom layers, macros, and firmware with ZMK.
-2. **Colemak Mod-DH: The Typing Layout That Changed Everything**  
+2. **[Colemak Mod-DH: The Typing Layout That Changed Everything](/blog/colemak-mod-dh-the-typing-layout-that-changed-everything.html)**  
    Why I switched, and how I adapted it to the Kinesis.
-3. **tmux: Terminal Multitasking Without Limits**  
+3. **[tmux: Terminal Multitasking Without Limits](/blog/tmux-for-keyboard-driven-development.html)**  
    Keyboard-driven pane, window, and session management.
-4. **awesomeWM: Managing Windows Like Code**  
-   Building a tiling environment that mirrors vim-style control.
-5. **neovim: Text Editing as an Extension of Thought**  
+4. **[Neovim: As the Development Core](/blog/neovim-as-the-development-core.html)**  
    Plugins, motions, and mappings integrated with the layout.
-6. **neomutt: Keyboard-Only Communication**  
-   Staying in flow while handling email in the terminal.
-7. **Bringing It All Together: A Day in the Life**  
+5. **[Bringing It All Together: A Day in the Life](#)**  
    Walking through a full workflow — no mouse required.
 
 ---

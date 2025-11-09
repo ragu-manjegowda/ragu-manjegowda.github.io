@@ -9,9 +9,9 @@ series_order: 5
 excerpt: "Deep technical dive into my Neovim configuration: lazy.nvim, native LSP with Blink.cmp, Treesitter syntax parsing, git integration, and keymaps aligned with Colemak Mod-DH. Every plugin, colorscheme tweak, and autocmd documented."
 ---
 
-This post continues my *Keyboard-Driven Development* series — a deep technical dive into the configuration, plugins, and design principles that power my Neovim setup.
+This post continues my *[Keyboard-Driven Development](/blog/keyboard-driven-development-why-i-built-it.html)* series — a deep technical dive into the configuration, plugins, and design principles that power my Neovim setup.
 
-In previous posts, we talked about how my **Kinesis Advantage 360**, **Colemak Mod-DH layout**, and **tmux setup** form the physical and terminal layers of my environment.  
+In previous posts, we talked about how my **[Kinesis Advantage 360](/blog/kinesis-advantage360-pro-my-setup-workflow.html)**, **[Colemak Mod-DH layout](/blog/colemak-mod-dh-the-typing-layout-that-changed-everything.html)**, and **[tmux setup](/blog/tmux-for-keyboard-driven-development.html)** form the physical and terminal layers of my environment.  
 Now, we're moving to the heart of it all — **Neovim** — the editor that powers everything I write, code, or edit.
 
 This is a **technical deep-dive** that captures every detail of my configuration: from Lua module architecture to LSP diagnostics configuration to plugin-specific tweaks. If you want to understand *exactly* how my Neovim environment works, this post is for you.

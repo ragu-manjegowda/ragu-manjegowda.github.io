@@ -11,9 +11,9 @@ excerpt: "How I configured my Kinesis Advantage360 Pro with the Colemak Mod-DH l
 
 ## Why the Kinesis Advantage360 Pro?
 
-When I decided to move beyond “just better ergonomics” and build a **keyboard-driven development** setup, I wanted hardware that could keep up. The Kinesis Advantage360 Pro (Adv360) stood out because it offers deep programmability, a split ergonomic layout, and the flexibility to map virtually every key to a behavior that supports my workflow.
+When I decided to move beyond "just better ergonomics" and build a **[keyboard-driven development](/blog/keyboard-driven-development-why-i-built-it.html)** setup, I wanted hardware that could keep up. The Kinesis Advantage360 Pro (Adv360) stood out because it offers deep programmability, a split ergonomic layout, and the flexibility to map virtually every key to a behavior that supports my workflow.
 
-In this post I'll walk through how I've configured the board: from the hardware fundamentals to the firmware, the layout (Colemak Mod‑DH), and the custom macros and mouse emulation that let me stay fully in the keyboard zone.
+In this post I'll walk through how I've configured the board: from the hardware fundamentals to the firmware, the layout ([Colemak Mod‑DH](/blog/colemak-mod-dh-the-typing-layout-that-changed-everything.html)), and the custom macros and mouse emulation that let me stay fully in the keyboard zone.
 
 ---
 

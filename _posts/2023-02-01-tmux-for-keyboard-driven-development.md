@@ -9,7 +9,7 @@ series_order: 4
 excerpt: "How I use tmux—with nested sessions, OSC52 clipboard integration, and a curated set of plugins—to build a fast, reproducible, and entirely keyboard-driven terminal workflow."
 ---
 
-In this post of the *Keyboard-Driven Development* series, I'll dive deep into my tmux setup — a meticulously engineered terminal multiplexer configuration that serves as the backbone of my development workflow across local and remote environments.
+In this post of the *[Keyboard-Driven Development](/blog/keyboard-driven-development-why-i-built-it.html)* series, I'll dive deep into my tmux setup — a meticulously engineered terminal multiplexer configuration that serves as the backbone of my development workflow across local and remote environments.
 
 This isn't just about basic tmux usage. I've built a comprehensive system that includes:
 - **Advanced OSC52 clipboard integration** with custom yank scripts
