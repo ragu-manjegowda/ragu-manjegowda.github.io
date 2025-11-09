@@ -87,15 +87,17 @@ This post kicks off the **Keyboard-Driven Development** series, where I'll break
 
 0. **[Keyboard-Driven Development: Why I Built It](/blog/keyboard-driven-development-why-i-built-it.html)** *(this post)*  
    The philosophy and vision behind the keyboard-driven workflow.
-1. **[Kinesis Advantage360 Pro: My Setup and Workflow](/blog/kinesis-advantage360-pro-my-setup-workflow.html)**  
-   Custom layers, macros, and firmware with ZMK.
-2. **[Colemak Mod-DH: The Typing Layout That Changed Everything](/blog/colemak-mod-dh-the-typing-layout-that-changed-everything.html)**  
+1. **[Colemak Mod-DH: The Typing Layout That Changed Everything](/blog/colemak-mod-dh-the-typing-layout-that-changed-everything.html)**  
    Why I switched, and how I adapted it to the Kinesis.
-3. **[tmux: Terminal Multitasking Without Limits](/blog/tmux-for-keyboard-driven-development.html)**  
+2. **[tmux for Keyboard-Driven Development](/blog/tmux-for-keyboard-driven-development.html)**  
    Keyboard-driven pane, window, and session management.
-4. **[Neovim: As the Development Core](/blog/neovim-as-the-development-core.html)**  
+3. **[Neovim as the Development Core](/blog/neovim-as-the-development-core.html)**  
    Plugins, motions, and mappings integrated with the layout.
-5. **[Bringing It All Together: A Day in the Life](#)**  
+4. **[Kinesis Advantage360 Pro: My Setup & Workflow](/blog/kinesis-advantage360-pro-my-setup-workflow.html)**  
+   Custom layers, macros, and firmware with ZMK.
+5. **[NeoMutt: Terminal-Native Email for the Keyboard-Driven Developer](/blog/neomutt-terminal-native-email-client.html)**  
+   Fast, scriptable email client with mbsync, msmtp, and full-text search.
+6. **[Bringing It All Together: A Day in the Life](#)**  
    Walking through a full workflow — no mouse required.
 
 ---
