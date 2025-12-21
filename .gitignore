@@ -48,3 +48,6 @@ Temporary Items
 
 # VSCode
 .vscode/
+
+# LLM harness
+.opencode/

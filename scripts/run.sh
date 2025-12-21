@@ -9,6 +9,7 @@ NC='\033[0m' # No Color
 
 # Default mode
 MODE="docker"
+LOCAL_URL="http://localhost:4000"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -66,6 +67,7 @@ if [ "$MODE" = "docker" ]; then
         # Rename lock file temporarily so Docker's Bundler creates its own
         # This avoids Bundler version conflicts (host 2.7.2 vs Docker 2.3.25)
         echo "Running Jekyll in Docker..."
+        echo -e "${GREEN}Open ${YELLOW}${LOCAL_URL}${NC}${GREEN} in your browser.${NC}"
 
         # Function to restore lock file on exit or interrupt
         restore_lock() {
@@ -121,7 +123,8 @@ if [ "$MODE" = "local" ]; then
     # Serve on localhost with Select-based event selector
     # (liburing.so.2 may not be available in all environments)
     export IO_EVENT_SELECTOR=Select
-    bundle exec jekyll serve --incremental --host "0.0.0.0"
+    echo -e "${GREEN}Open ${YELLOW}${LOCAL_URL}${NC}${GREEN} in your browser.${NC}"
+    bundle exec jekyll serve --incremental --host "localhost"
 
     exit 0
 fi

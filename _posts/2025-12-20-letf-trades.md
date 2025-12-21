@@ -61,5 +61,12 @@ I am intentionally leaving this post unexplained—I don't have enough real-worl
 
 ---
 
-*Charts updated daily after market close.*
+## TECL from TQQQ Signals
 
+<div class="chart-container">
+  <iframe src="/assets/charts/tecl_from_tqqq_ema_chart.html"></iframe>
+</div>
+
+---
+
+*Charts updated daily after market close.*

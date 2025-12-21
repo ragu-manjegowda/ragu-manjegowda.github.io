@@ -23,7 +23,7 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
 
         Note: Uses `Gemfile.docker` with `sassc` for Alpine Linux compatibility (avoids `sass-embedded` issues).
 
-        Open a browser and navigate to http://0.0.0.0:4000
+        Open a browser and navigate to http://localhost:4000
 
    - b. Native
 
@@ -44,6 +44,8 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
         ```
         $ ./scripts/run.sh
         ```
+
+        Open a browser and navigate to http://localhost:4000
 
 
 ## 2. Remote
