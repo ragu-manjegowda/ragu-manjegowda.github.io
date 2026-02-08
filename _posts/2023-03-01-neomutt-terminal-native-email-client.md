@@ -34,8 +34,8 @@ My setup supports **four account modes** — two accounts (work and personal), e
 |---------|-----|------|-----------|---------|-----------|
 | outlook | `i1` | Online | IMAP direct to Office365 | SMTP direct | IMAP server-side |
 | outlook-offline | `i2` | Offline | mbsync → Maildir | msmtp | notmuch (local) |
-| gmail             | `i3` | Online | IMAP direct to Gmail | SMTP direct | IMAP server-side |
-| gmail-offline | `i4` | Offline | mbsync → Maildir | msmtp | notmuch (local) |
+| gmail-personal | `i3` | Online | IMAP direct to Gmail | SMTP direct | IMAP server-side |
+| gmail-personal-offline | `i4` | Offline | mbsync → Maildir | msmtp | notmuch (local) |
 
 ### Online Mode Architecture
 
@@ -78,75 +78,74 @@ My setup supports **four account modes** — two accounts (work and personal), e
 | Layer | Component | Purpose | Config Location |
 |-------|-----------|---------|-----------------|
 | **UI** | NeoMutt | Email client, folder browsing, compose | [`neomuttrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/neomuttrc) |
-| **Sync** | mbsync | Bi-directional IMAP ↔ Maildir sync | [`mbsyncrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/imapnotify/mbsyncrc) |
-| **Send** | msmtp | SMTP submission with OAuth2 | [`msmtprc_outlook`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/msmtprc_outlook) |
+| **Sync** | mbsync | Bi-directional IMAP ↔ Maildir sync | [`accounts/work/mbsyncrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/mbsyncrc) |
+| **Send** | msmtp | SMTP submission with OAuth2 | [`accounts/work/msmtprc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/msmtprc) |
 | **Search** | notmuch | Full-text indexing (Xapian backend) | `.notmuch-config` in maildir |
-| **Security** | GPG | Credential encryption | `pass.gpg`, `gpg.rc` |
-| **Auth** | OAuth2 | Modern authentication for O365/Gmail | `mutt_oauth2_*.py` scripts |
+| **Security** | GPG | Credential encryption | `credentials/pass_outlook.gpg`, `config/gpg.rc` |
+| **Auth** | OAuth2 | Modern authentication for O365/Gmail | `accounts/*/oauth2.py` scripts |
 
 ---
 
 ## Directory Structure
 
-```mermaid
+```text
 ~/.config/neomutt/
-├── neomuttrc                    # Main configuration
-├── bindings.mutt                # Keyboard bindings
-├── styles.muttrc                # Status bar formats, icons
-├── colors-custom.muttrc         # Color scheme (Solarized)
-├── mailcap                      # MIME type handlers
-├── gpg.rc                       # GPG integration
-├── aliases                      # Auto-generated address book
-├── headers                      # Custom email headers
+├── neomuttrc                    # Main entry point
+├── README.md                    # Documentation
+│
+├── config/                      # Mutt config files
+│   ├── bindings.mutt            # Keybindings
+│   ├── colors.muttrc            # Color scheme
+│   ├── gpg.rc                   # GPG integration
+│   ├── headers                  # Custom headers
+│   ├── mailcap                  # MIME handlers
+│   └── styles.muttrc            # Status bar formats, icons
+│
+├── credentials/                 # Encrypted credentials & tokens
+│   ├── pass_outlook.gpg         # Work credentials
+│   ├── pass_gmail-personal.gpg  # Personal credentials
+│   ├── token_outlook            # Work OAuth2 token
+│   └── token_gmail-personal     # Personal OAuth2 token
 │
 ├── accounts/
 │   ├── work/
-│   │   ├── outlook              # Online IMAP config
-│   │   ├── outlook-offline      # Offline Maildir config
-│   │   ├── mbsyncrc_outlook     # mbsync configuration
-│   │   ├── msmtprc_outlook      # SMTP configuration
-│   │   ├── mutt_oauth2_outlook.py
-│   │   ├── TOKEN_FILENAME_outlook
+│   │   ├── config               # Online IMAP config
+│   │   ├── config-offline       # Offline Maildir config
+│   │   ├── mbsyncrc             # mbsync configuration
+│   │   ├── msmtprc              # SMTP configuration
+│   │   ├── oauth2.py            # OAuth2 refresh
 │   │   ├── update-mailboxes.sh  # Sync folder list
 │   │   └── setup-offline.sh     # Initialize offline mode
-│   │
 │   └── personal/
-│       ├── gmail                # Online IMAP config
-│       ├── gmail-offline        # Offline Maildir config
-│       ├── mbsyncrc_gmail
-│       ├── msmtprc_gmail
-│       ├── mutt_oauth2_gmail.py
-│       ├── TOKEN_FILENAME_gmail
+│       ├── config
+│       ├── config-offline
+│       ├── mbsyncrc
+│       ├── msmtprc
+│       ├── oauth2.py
 │       ├── update-mailboxes.sh
 │       └── setup-offline.sh
 │
-├── maildir/
-│   ├── outlook/                 # Work maildir storage
-│   │   ├── Inbox/
-│   │   │   ├── cur/             # Read messages
-│   │   │   ├── new/             # Newly arrived
-│   │   │   └── tmp/             # Transient state
-│   │   ├── Sent Items/
-│   │   ├── Drafts/
-│   │   └── .notmuch-config      # notmuch configuration
-│   │
-│   └── gmail/                   # Personal maildir storage
-│       ├── Inbox/
-│       ├── [Gmail]/
-│       │   ├── Sent Mail/
-│       │   ├── Drafts/
-│       │   └── Trash/
-│       └── .notmuch-config
-│
 ├── scripts/
+│   ├── create-alias.sh          # Auto-create aliases from sent mail
 │   ├── fzf-notmuch-search.sh    # Fuzzy search with fzf
-│   └── sync-notmuch-flags.sh    # Sync maildir flags ↔ notmuch tags
+│   ├── mutt-ical.py             # Calendar invite handler
+│   ├── render-calendar-attachment.py
+│   └── viewmailattachments.py   # HTML email viewer
 │
-├── cache/                       # Header and body caches
-├── create-alias.sh              # Auto-create aliases from sent mail
-├── mutt-ical.py                 # Calendar invite handler
-├── render-calendar-attachment.py
-└── viewmailattachments.py       # HTML email viewer
+├── assets/
+│   └── neomutt.svg
+│
+├── tests/
+│   └── ...
+│
+└── .gitignored/                 # Runtime data (not tracked)
+    ├── cache/                   # Header and body caches
+    ├── maildir/                 # Maildir storage
+    │   ├── outlook/             # Work maildir
+    │   └── gmail-personal/      # Personal maildir
+    └── data/
+        ├── aliases              # Auto-generated address book
+        └── history              # Command history
 ```
 
 ---
@@ -210,7 +209,7 @@ set pager_stop          = yes     # Don't advance to next message at end
 #### HTML and Calendar Rendering
 
 ```muttrc
-set mailcap_path        = "$XDG_CONFIG_HOME/neomutt/mailcap"
+set mailcap_path        = "$XDG_CONFIG_HOME/neomutt/config/mailcap"
 
 auto_view text/calendar
 auto_view application/ics
@@ -218,15 +217,15 @@ auto_view text/html
 alternative_order text/calendar application/ics text/html text/plain text/enriched
 ```
 
-The [`mailcap`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/mailcap) file routes MIME types to appropriate handlers:
+The [`mailcap`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/config/mailcap) file routes MIME types to appropriate handlers:
 
 ```mailcap
 # HTML rendering with w3m
 text/html; w3m -v -F -o display_link_number=1 -I %{charset} -T text/html -dump; copiousoutput
 
 # Calendar invites via custom Python script
-text/calendar; python $XDG_CONFIG_HOME/neomutt/render-calendar-attachment.py %s; copiousoutput
-application/ics; python $XDG_CONFIG_HOME/neomutt/render-calendar-attachment.py %s; copiousoutput
+text/calendar; python $XDG_CONFIG_HOME/neomutt/scripts/render-calendar-attachment.py %s; copiousoutput
+application/ics; python $XDG_CONFIG_HOME/neomutt/scripts/render-calendar-attachment.py %s; copiousoutput
 
 # PDFs with zathura
 application/pdf; zathura 2> /dev/null '%s'
@@ -251,14 +250,14 @@ set sidebar_next_new_wrap = yes
 #### Auto-Generated Aliases
 
 ```muttrc
-set display_filter      = $XDG_CONFIG_HOME/neomutt/create-alias.sh
-set alias_file          = $XDG_CONFIG_HOME/neomutt/aliases
+set display_filter      = $XDG_CONFIG_HOME/neomutt/scripts/create-alias.sh
+set alias_file          = $XDG_CONFIG_HOME/neomutt/.gitignored/data/aliases
 set sort_alias          = alias
 set reverse_alias       = yes
 source "cat $alias_file 2> /dev/null |"
 ```
 
-The [`create-alias.sh`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/create-alias.sh) script automatically extracts recipients and adds them to the alias file for future tab-completion.
+The [`create-alias.sh`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/scripts/create-alias.sh) script automatically extracts recipients and adds them to the alias file for future tab-completion.
 
 ---
 
@@ -268,26 +267,26 @@ Account switching is handled via macros in [`neomuttrc`](https://github.com/ragu
 
 ```muttrc
 # Default account on startup
-source $XDG_CONFIG_HOME/neomutt/accounts/work/outlook-offline
+source $XDG_CONFIG_HOME/neomutt/accounts/work/config-offline
 
 # Disable 'i' to allow 'i1', 'i2', etc. macros
 bind index,pager i noop
 
 macro index,pager i1 '<sync-mailbox><enter-command>source \
-    $XDG_CONFIG_HOME/neomutt/accounts/work/outlook<enter>\
+    $XDG_CONFIG_HOME/neomutt/accounts/work/config<enter>\
     <change-folder>!<enter>;<check-stats>' "switch to outlook - online"
 
 macro index,pager i2 '<sync-mailbox><enter-command>source \
-    $XDG_CONFIG_HOME/neomutt/accounts/work/outlook-offline<enter>\
+    $XDG_CONFIG_HOME/neomutt/accounts/work/config-offline<enter>\
     <change-folder>!<enter>;<check-stats>' "switch to outlook - offline"
 
 macro index,pager i3 '<sync-mailbox><enter-command>source \
-    $XDG_CONFIG_HOME/neomutt/accounts/personal/gmail<enter>\
-    <change-folder>!<enter>;<check-stats>' "switch to gmail - online"
+    $XDG_CONFIG_HOME/neomutt/accounts/personal/config<enter>\
+    <change-folder>!<enter>;<check-stats>' "switch to gmail-personal - online"
 
 macro index,pager i4 '<sync-mailbox><enter-command>source \
-    $XDG_CONFIG_HOME/neomutt/accounts/personal/gmail-offline<enter>\
-    <change-folder>!<enter>;<check-stats>' "switch to gmail - offline"
+    $XDG_CONFIG_HOME/neomutt/accounts/personal/config-offline<enter>\
+    <change-folder>!<enter>;<check-stats>' "switch to gmail-personal - offline"
 ```
 
 Each account config redefines:
@@ -304,12 +303,12 @@ Each account config redefines:
 
 ### Online Account Example (Gmail)
 
-From [`gmail`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/personal/gmail):
+From [`accounts/personal/config`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/personal/config):
 
 ```muttrc
 # Source encrypted credentials
 source "gpg -dq --no-emit-version --for-your-eyes-only \
-    ~/.config/neomutt/pass_gmail.gpg |"
+    $XDG_CONFIG_HOME/neomutt/credentials/pass_gmail-personal.gpg |"
 
 set my_user     = "$my_username"
 set imap_pass   = "$my_password"
@@ -327,8 +326,8 @@ set trash       = "+[Gmail]/Trash"
 # OAuth2 authentication
 set imap_authenticators = "oauthbearer:xoauth2"
 set smtp_authenticators = ${imap_authenticators}
-set imap_oauth_refresh_command = "$XDG_CONFIG_HOME/neomutt/accounts/personal/mutt_oauth2_gmail.py \
-    $XDG_CONFIG_HOME/neomutt/accounts/personal/TOKEN_FILENAME_gmail"
+set imap_oauth_refresh_command = "$XDG_CONFIG_HOME/neomutt/accounts/personal/oauth2.py \
+    $XDG_CONFIG_HOME/neomutt/credentials/token_gmail-personal"
 set smtp_oauth_refresh_command = ${imap_oauth_refresh_command}
 
 # SMTP settings
@@ -346,19 +345,19 @@ unset nm_config_file
 
 ### Offline Account Example (Outlook)
 
-From [`outlook-offline`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/outlook-offline):
+From [`accounts/work/config-offline`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/config-offline):
 
 ```muttrc
 # Source encrypted credentials
 source "gpg -dq --no-emit-version --for-your-eyes-only \
-    ~/.config/neomutt/pass.gpg |"
+    $XDG_CONFIG_HOME/neomutt/credentials/pass_outlook.gpg |"
 
 set my_user     = "$my_username"
 set realname    = "$my_name"
 set from        = "$my_email"
 
 # Local Maildir (synced via mbsync)
-set folder      = $XDG_CONFIG_HOME/neomutt/maildir/outlook
+set folder      = $XDG_CONFIG_HOME/neomutt/.gitignored/maildir/outlook
 set mbox_type   = Maildir
 set spoolfile   = "+Inbox"
 set record      = "+Sent Items"
@@ -366,11 +365,11 @@ set postponed   = "+Drafts"
 set trash       = "+Deleted Items"
 
 # SMTP via msmtp (separate from IMAP)
-set sendmail    = "msmtp -C $XDG_CONFIG_HOME/neomutt/accounts/work/msmtprc_outlook -a outlook"
+set sendmail    = "msmtp -C $XDG_CONFIG_HOME/neomutt/accounts/work/msmtprc -a outlook"
 
 # Notmuch search configuration
-set nm_default_url  = "notmuch://$HOME/.config/neomutt/maildir/outlook"
-set nm_config_file  = "$HOME/.config/neomutt/maildir/outlook/.notmuch-config"
+set nm_default_url  = "notmuch://$HOME/.config/neomutt/.gitignored/maildir/outlook"
+set nm_config_file  = "$HOME/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config"
 set nm_query_type   = messages
 
 # Notmuch search macro
@@ -380,7 +379,7 @@ macro index \\ "<vfolder-from-query>" "search mails using notmuch"
 macro index | "\
 <enter-command>unset wait_key<enter>\
 <shell-escape>$XDG_CONFIG_HOME/neomutt/scripts/fzf-notmuch-search.sh \
-$HOME/.config/neomutt/maildir/outlook/.notmuch-config<enter>\
+$HOME/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config<enter>\
 <enter-command>set wait_key<enter>\
 <enter-command>source /tmp/neomutt-fzf-cmd.muttrc<enter>" \
 "fuzzy search query with fzf"
@@ -389,7 +388,7 @@ $HOME/.config/neomutt/maildir/outlook/.notmuch-config<enter>\
 macro index o "<enter-command>unset wait_key<enter> \
 <shell-escape>~/.config/imapnotify/notify.sh && \
 notify-send -u normal -a neomutt \
--i ~/.config/neomutt/neomutt.svg \"Emails synchronized!\" &<enter> \
+-i ~/.config/neomutt/assets/neomutt.svg \"Emails synchronized!\" &<enter> \
 <enter-command>set wait_key=yes<enter>" \
 "run mbsync to sync outlook"
 ```
@@ -398,7 +397,7 @@ notify-send -u normal -a neomutt \
 
 ## Keyboard Bindings
 
-The [`bindings.mutt`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/bindings.mutt) file defines **vi-motion-centric** keybindings:
+The [`bindings.mutt`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/config/bindings.mutt) file defines **vi-motion-centric** keybindings:
 
 ### Navigation
 
@@ -464,7 +463,7 @@ macro compose ,sp \
 # View HTML in browser
 macro index,pager ,of \
 "<enter-command>unset wait_key<enter>\
-<pipe-message>python ~/.config/neomutt/viewmailattachments.py 2>/dev/null\n &<enter>" \
+<pipe-message>python ~/.config/neomutt/scripts/viewmailattachments.py 2>/dev/null\n &<enter>" \
 "View HTML email in browser"
 
 # Mark all as read
@@ -485,7 +484,7 @@ Modern mail providers (Office365, Gmail) require OAuth2. NeoMutt supports this v
 
 ### The mutt_oauth2.py Script
 
-The [`mutt_oauth2.py`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py) script (originally from NeoMutt contrib) handles the OAuth2 flow. Each account has its own copy with provider-specific configuration.
+The [`mutt_oauth2.py`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/personal/oauth2.py) script (originally from NeoMutt contrib) handles the OAuth2 flow. Each account has its own copy with provider-specific configuration.
 
 #### Script Configuration
 
@@ -550,9 +549,9 @@ Options:
 When running for the first time or with a new token file:
 
 ```bash
-~/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py \
+~/.config/neomutt/accounts/personal/oauth2.py \
     --verbose --authorize \
-    ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+~/.config/neomutt/credentials/token_gmail-personal
 ```
 
 **Interactive prompts:**
@@ -575,9 +574,9 @@ Account e-mail address: your-email@gmail.com
 **Example with `localhostauthcode` (recommended):**
 
 ```bash
-$ ~/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py \
+$ ~/.config/neomutt/accounts/personal/oauth2.py \
     --verbose --authorize \
-    ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+~/.config/neomutt/credentials/token_gmail-personal
 
 Available app and endpoint registrations: google microsoft
 OAuth2 registration: google
@@ -599,8 +598,8 @@ Once authorized, the script automatically refreshes tokens when called:
 
 ```bash
 # Just get a fresh access token (what NeoMutt calls)
-~/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py \
-    ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+~/.config/neomutt/accounts/personal/oauth2.py \
+~/.config/neomutt/credentials/token_gmail-personal
 ```
 
 Output (just the token):
@@ -620,9 +619,9 @@ Access Token: ya29.a0AUMWg_JN59QF5SHWpcrwPa_XO1m3ya...
 After authorization, test all endpoints:
 
 ```bash
-~/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py \
+~/.config/neomutt/accounts/personal/oauth2.py \
     --verbose --test \
-    ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+~/.config/neomutt/credentials/token_gmail-personal
 ```
 
 Expected output:
@@ -644,12 +643,12 @@ Re-run with `--authorize` when:
 
 ```bash
 # Delete old token file and start fresh
-rm ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+rm ~/.config/neomutt/credentials/token_gmail-personal
 
 # Re-authorize
-~/.config/neomutt/accounts/personal/mutt_oauth2_gmail.py \
+~/.config/neomutt/accounts/personal/oauth2.py \
     --verbose --authorize \
-    ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
+~/.config/neomutt/credentials/token_gmail-personal
 ```
 
 ### How NeoMutt Uses the Script
@@ -658,8 +657,8 @@ In your account config:
 
 ```muttrc
 set imap_authenticators = "oauthbearer:xoauth2"
-set imap_oauth_refresh_command = "$XDG_CONFIG_HOME/neomutt/accounts/personal/mutt_oauth2_gmail.py \
-    $XDG_CONFIG_HOME/neomutt/accounts/personal/TOKEN_FILENAME_gmail"
+set imap_oauth_refresh_command = "$XDG_CONFIG_HOME/neomutt/accounts/personal/oauth2.py \
+    $XDG_CONFIG_HOME/neomutt/credentials/token_gmail-personal"
 set smtp_oauth_refresh_command = ${imap_oauth_refresh_command}
 ```
 
@@ -675,11 +674,11 @@ NeoMutt calls the script whenever it needs to authenticate. The script:
 The token file is GPG-encrypted and mode 0600:
 
 ```bash
-$ ls -la ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
--rw------- 1 ragu ragu 899 Feb  1 21:32 TOKEN_FILENAME_gmail
+$ ls -la ~/.config/neomutt/credentials/token_gmail-personal
+-rw------- 1 ragu ragu 899 Feb  1 21:32 token_gmail-personal
 
-$ file ~/.config/neomutt/accounts/personal/TOKEN_FILENAME_gmail
-TOKEN_FILENAME_gmail: GPG symmetrically encrypted data (AES256 cipher)
+$ file ~/.config/neomutt/credentials/token_gmail-personal
+token_gmail-personal: GPG symmetrically encrypted data (AES256 cipher)
 ```
 
 The script will refuse to run if file permissions are too open:
@@ -776,7 +775,7 @@ If you prefer to register your own Azure AD application:
 
 ### mbsync Configuration
 
-From [`mbsyncrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/imapnotify/mbsyncrc) (Outlook example):
+From [`accounts/work/mbsyncrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/accounts/work/mbsyncrc) (Outlook example):
 
 ```
 CopyArrivalDate yes
@@ -795,8 +794,8 @@ IMAPStore outlook-remote
 Account outlook
 
 MaildirStore outlook-local
-Path ~/.config/neomutt/maildir/outlook/
-Inbox ~/.config/neomutt/maildir/outlook/Inbox
+Path ~/.config/neomutt/.gitignored/maildir/outlook/
+Inbox ~/.config/neomutt/.gitignored/maildir/outlook/Inbox
 SubFolders Verbatim
 
 Channel outlook
@@ -818,10 +817,10 @@ Sync Full
 mbsync -a
 
 # Sync specific account
-mbsync -c ~/.config/imapnotify/mbsyncrc outlook
+mbsync -c ~/.config/neomutt/accounts/work/mbsyncrc outlook
 
 # List available mailboxes (without syncing)
-mbsync -Vl -c ~/.config/imapnotify/mbsyncrc outlook
+mbsync -Vl -c ~/.config/neomutt/accounts/work/mbsyncrc outlook
 ```
 
 ### Automatic Sync
@@ -830,14 +829,22 @@ The [`notify.sh`](https://github.com/ragu-manjegowda/config/blob/master/.config/
 
 ```bash
 #!/bin/bash
-export NOTMUCH_CONFIG="$HOME/.config/neomutt/maildir/outlook/.notmuch-config"
 
+# Sync work account (outlook)
+export NOTMUCH_CONFIG="$HOME/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config"
 ~/.config/imapnotify/fetch-emails.py
 echo "awesome.emit_signal('module::email:show', true)" | awesome-client
-mbsync -V -c ~/.config/imapnotify/mbsyncrc -a
+mbsync -V -c ~/.config/neomutt/accounts/work/mbsyncrc outlook
 notmuch new
 ~/.config/neomutt/scripts/sync-notmuch-flags.sh "$NOTMUCH_CONFIG" \
-    "$HOME/.config/neomutt/maildir/outlook" > /dev/null 2>&1
+    "$HOME/.config/neomutt/.gitignored/maildir/outlook" > /dev/null 2>&1
+
+# Sync personal account (gmail-personal)
+export NOTMUCH_CONFIG="$HOME/.config/neomutt/.gitignored/maildir/gmail-personal/.notmuch-config"
+mbsync -V -c ~/.config/neomutt/accounts/personal/mbsyncrc gmail-personal
+notmuch new
+~/.config/neomutt/scripts/sync-notmuch-flags.sh "$NOTMUCH_CONFIG" \
+    "$HOME/.config/neomutt/.gitignored/maildir/gmail-personal" > /dev/null 2>&1
 ```
 
 This is triggered by **goimapnotify** which monitors IMAP IDLE for real-time notifications.
@@ -851,7 +858,7 @@ This is triggered by **goimapnotify** which monitors IMAP IDLE for real-time not
 Each maildir has a `.notmuch-config` file. After syncing, index messages:
 
 ```bash
-NOTMUCH_CONFIG=~/.config/neomutt/maildir/outlook/.notmuch-config notmuch new
+NOTMUCH_CONFIG=~/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config notmuch new
 ```
 
 ### Search Syntax in NeoMutt
@@ -902,8 +909,8 @@ The [`sync-notmuch-flags.sh`](https://github.com/ragu-manjegowda/config/blob/mas
 
 ```bash
 ~/.config/neomutt/scripts/sync-notmuch-flags.sh \
-    ~/.config/neomutt/maildir/outlook/.notmuch-config \
-    ~/.config/neomutt/maildir/outlook
+    ~/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config \
+    ~/.config/neomutt/.gitignored/maildir/outlook
 ```
 
 ---
@@ -912,7 +919,7 @@ The [`sync-notmuch-flags.sh`](https://github.com/ragu-manjegowda/config/blob/mas
 
 ### Status Bar Format
 
-From [`styles.muttrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/styles.muttrc):
+From [`styles.muttrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/config/styles.muttrc):
 
 ```muttrc
 set ts_status_format = 'mutt %m messages%?n?, %n new?'
@@ -938,7 +945,7 @@ Icons used:
 
 ### Color Scheme
 
-From [`colors-custom.muttrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/colors-custom.muttrc) (Solarized-based):
+From [`colors.muttrc`](https://github.com/ragu-manjegowda/config/blob/master/.config/neomutt/config/colors.muttrc) (Solarized-based):
 
 ```muttrc
 # General
@@ -1007,8 +1014,8 @@ After setup, sync the folder list from IMAP:
 |-----|---------|------|
 | `i1` | Work (Outlook) | Online IMAP |
 | `i2` | Work (Outlook) | Offline Maildir |
-| `i3` | Personal (Gmail) | Online IMAP |
-| `i4` | Personal (Gmail) | Offline Maildir |
+| `i3` | Personal (gmail-personal) | Online IMAP |
+| `i4` | Personal (gmail-personal) | Offline Maildir |
 
 ### Essential Keybindings
 
@@ -1034,20 +1041,20 @@ After setup, sync the folder list from IMAP:
 
 ```bash
 # Test OAuth token
-~/.config/neomutt/accounts/work/mutt_oauth2_outlook.py \
-    ~/.config/neomutt/accounts/work/TOKEN_FILENAME_outlook
+~/.config/neomutt/accounts/work/oauth2.py \
+    ~/.config/neomutt/credentials/token_outlook
 
 # Manual sync
-mbsync -c ~/.config/imapnotify/mbsyncrc outlook
+mbsync -c ~/.config/neomutt/accounts/work/mbsyncrc outlook
 
 # notmuch search from terminal
-NOTMUCH_CONFIG=~/.config/neomutt/maildir/outlook/.notmuch-config \
+NOTMUCH_CONFIG=~/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config \
     notmuch search "from:boss date:1week.."
 
 # Sync flags
 ~/.config/neomutt/scripts/sync-notmuch-flags.sh \
-    ~/.config/neomutt/maildir/outlook/.notmuch-config \
-    ~/.config/neomutt/maildir/outlook
+    ~/.config/neomutt/.gitignored/maildir/outlook/.notmuch-config \
+    ~/.config/neomutt/.gitignored/maildir/outlook
 ```
 
 ---
