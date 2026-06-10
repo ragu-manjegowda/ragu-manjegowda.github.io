@@ -22,9 +22,9 @@ excerpt: "My leveraged ETF trades, updated daily."
   height: 70vh;
   max-height: 700px;
   overflow: hidden;
-  border: 1px solid #ddd;
+  border: 1px solid var(--theme-border-strong);
   border-radius: 8px;
-  background: #fff;
+  background: var(--theme-code-bg);
 }
 .chart-container iframe {
   position: absolute;
@@ -38,10 +38,10 @@ excerpt: "My leveraged ETF trades, updated daily."
   padding: 0 0.85rem;
   height: 2.25rem;
   line-height: 2.25rem;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--theme-border-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #333;
+  background: var(--theme-group-title-bg);
+  color: var(--theme-fg-bold);
   cursor: pointer;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -50,15 +50,15 @@ excerpt: "My leveraged ETF trades, updated daily."
 }
 .chart-fullscreen-button:hover,
 .chart-fullscreen-button:focus {
-  background: #fff;
-  color: #111;
+  background: var(--theme-accent);
+  color: var(--theme-bg);
 }
 .chart-frame:fullscreen,
 .chart-frame:-webkit-full-screen {
   width: 100vw;
   height: 100vh;
   padding: 1rem;
-  background: #fff;
+  background: var(--theme-group-bg);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
