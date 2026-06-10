@@ -53,27 +53,39 @@ excerpt: "My leveraged ETF trades, updated daily."
   background: var(--theme-accent);
   color: var(--theme-bg);
 }
-.chart-frame:fullscreen,
-.chart-frame:-webkit-full-screen {
+.chart-fullscreen-shell {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  padding: 1rem;
   background: var(--theme-group-bg);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  display: none;
+  overflow: hidden;
+  z-index: 10000;
 }
-.chart-frame:fullscreen .chart-container,
-.chart-frame:-webkit-full-screen .chart-container {
-  flex: 1;
-  height: auto;
-  min-height: 0;
-  max-height: none;
+.chart-fullscreen-shell.is-active {
+  display: block;
+}
+.chart-fullscreen-shell:fullscreen,
+.chart-fullscreen-shell:-webkit-full-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--theme-group-bg);
+  overflow: hidden;
+}
+.chart-fullscreen-shell .chart-controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+.chart-fullscreen-shell iframe {
+  display: block;
+  width: 100vw;
+  height: 100vh;
   border: none;
-  border-radius: 0;
-}
-.chart-frame:fullscreen iframe,
-.chart-frame:-webkit-full-screen iframe {
   min-width: 0;
 }
 @media (max-width: 768px) {
@@ -141,46 +153,142 @@ function activeFullscreenElement() {
   return document.fullscreenElement || document.webkitFullscreenElement;
 }
 
-function updateChartFullscreenButtons() {
-  var activeElement = activeFullscreenElement();
+var activeChartFullscreen = null;
 
+function chartFullscreenShell() {
+  var shell = document.querySelector('.chart-fullscreen-shell');
+  if (shell) return shell;
+
+  shell = document.createElement('div');
+  shell.className = 'chart-fullscreen-shell';
+  shell.innerHTML = '<div class="chart-controls"><button class="chart-fullscreen-button" type="button">Exit full screen</button></div>';
+  shell.querySelector('button').addEventListener('click', exitChartFullscreen);
+  document.body.appendChild(shell);
+  return shell;
+}
+
+function updateChartFullscreenButtons() {
   document.querySelectorAll('.chart-fullscreen-button').forEach(function(button) {
     var frame = button.closest('.chart-frame');
-    button.textContent = activeElement === frame ? 'Exit full screen' : 'Full screen';
+    if (frame) button.textContent = activeChartFullscreen && activeChartFullscreen.frame === frame ? 'Exit full screen' : 'Full screen';
   });
+}
+
+function resizeChartFrame(frame) {
+  var iframe = activeChartFullscreen && activeChartFullscreen.frame === frame ? activeChartFullscreen.iframe : frame.querySelector('iframe');
+  if (!iframe || !iframe.contentWindow || !iframe.contentDocument) return;
+
+  var graph = iframe.contentDocument.querySelector('.plotly-graph-div');
+  if (!graph) return;
+
+  graph.style.width = '100%';
+  graph.style.height = Math.max(iframe.clientHeight, 320) + 'px';
+
+  if (iframe.contentWindow.Plotly && iframe.contentWindow.Plotly.Plots) {
+    iframe.contentWindow.Plotly.Plots.resize(graph);
+  }
+}
+
+function resizeChartFrames() {
+  var frames = activeChartFullscreen ? [activeChartFullscreen.frame] : document.querySelectorAll('.chart-frame');
+
+  Array.prototype.forEach.call(frames, function(frame) {
+    resizeChartFrame(frame);
+    setTimeout(function() {
+      resizeChartFrame(frame);
+    }, 250);
+  });
+}
+
+function restoreChartFullscreen() {
+  if (!activeChartFullscreen) return;
+
+  var active = activeChartFullscreen;
+  var container = active.frame.querySelector('.chart-container');
+  if (active.placeholder.parentNode) {
+    active.placeholder.parentNode.replaceChild(active.iframe, active.placeholder);
+  } else if (container) {
+    container.appendChild(active.iframe);
+  }
+
+  active.shell.classList.remove('is-active');
+  activeChartFullscreen = null;
+  updateChartFullscreenButtons();
+  resizeChartFrames();
+}
+
+function exitChartFullscreen() {
+  if (activeFullscreenElement()) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+      return;
+    }
+
+    if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+      return;
+    }
+  }
+
+  restoreChartFullscreen();
+}
+
+function enterChartFullscreen(frame) {
+  if (activeChartFullscreen && activeChartFullscreen.frame === frame) {
+    exitChartFullscreen();
+    return;
+  }
+
+  if (activeChartFullscreen) restoreChartFullscreen();
+
+  var iframe = frame.querySelector('iframe');
+  if (!iframe) return;
+
+  var shell = chartFullscreenShell();
+  var placeholder = document.createComment('chart fullscreen placeholder');
+  iframe.parentNode.insertBefore(placeholder, iframe);
+  shell.appendChild(iframe);
+  shell.classList.add('is-active');
+
+  activeChartFullscreen = {
+    frame: frame,
+    iframe: iframe,
+    placeholder: placeholder,
+    shell: shell
+  };
+
+  updateChartFullscreenButtons();
+  resizeChartFrames();
+
+  if (shell.requestFullscreen) {
+    shell.requestFullscreen();
+    return;
+  }
+
+  if (shell.webkitRequestFullscreen) {
+    shell.webkitRequestFullscreen();
+  }
 }
 
 document.querySelectorAll('.chart-fullscreen-button').forEach(function(button) {
   button.addEventListener('click', function() {
     var frame = button.closest('.chart-frame');
-    var iframe = frame.querySelector('iframe');
-
-    if (activeFullscreenElement() === frame) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-        return;
-      }
-
-      if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-        return;
-      }
-    }
-
-    if (frame.requestFullscreen) {
-      frame.requestFullscreen();
-      return;
-    }
-
-    if (frame.webkitRequestFullscreen) {
-      frame.webkitRequestFullscreen();
-      return;
-    }
-
-    window.open(iframe.src, '_blank', 'noopener');
+    enterChartFullscreen(frame);
   });
 });
 
-document.addEventListener('fullscreenchange', updateChartFullscreenButtons);
-document.addEventListener('webkitfullscreenchange', updateChartFullscreenButtons);
+document.querySelectorAll('.chart-frame iframe').forEach(function(iframe) {
+  iframe.addEventListener('load', resizeChartFrames);
+});
+
+window.addEventListener('resize', resizeChartFrames);
+document.addEventListener('fullscreenchange', function() {
+  if (activeChartFullscreen && !activeFullscreenElement()) restoreChartFullscreen();
+  else resizeChartFrames();
+});
+document.addEventListener('webkitfullscreenchange', function() {
+  if (activeChartFullscreen && !activeFullscreenElement()) restoreChartFullscreen();
+  else resizeChartFrames();
+});
+resizeChartFrames();
 </script>
