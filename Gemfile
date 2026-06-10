@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-# Use the official GitHub Pages gem — this locks all dependency versions
-gem "github-pages", group: :jekyll_plugins
+# Use the official GitHub Pages gem so local builds match GitHub Pages.
+gem "github-pages", "~> 232", group: :jekyll_plugins
 
 # Optional: run link and HTML checks locally
 gem "html-proofer", group: :development

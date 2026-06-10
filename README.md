@@ -13,15 +13,13 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
 
 ## 1. Local
 
-   - a. Docker based
+   - a. Script
 
         From the repo's root directory run,
 
         ```
-        $ docker run --rm -it -p 4000:4000 -v "$PWD:/srv/jekyll" -e BUNDLE_GEMFILE=Gemfile.docker jekyll/jekyll jekyll serve --watch --incremental --host "0.0.0.0"
+        $ ./scripts/run.sh
         ```
-
-        Note: Uses `Gemfile.docker` with `sassc` for Alpine Linux compatibility (avoids `sass-embedded` issues).
 
         Open a browser and navigate to http://localhost:4000
 
@@ -37,12 +35,12 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
         Open a browser and navigate to http://localhost:4000 (or the port number that jekyll 
         indicates to open)
 
-   - c. Script
+   - c. Docker based
 
         From the repo's root directory run,
 
         ```
-        $ ./scripts/run.sh
+        $ ./scripts/run.sh --docker
         ```
 
         Open a browser and navigate to http://localhost:4000

@@ -8,8 +8,9 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Default mode
-MODE="docker"
+MODE="local"
 LOCAL_URL="http://localhost:4000"
+DOCKER_IMAGE="ruby:3.3.4"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -23,11 +24,11 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     --help|-h)
-      echo "Usage: $0 [--docker|-d] [--local|-l] [--help|-h]"
+      echo "Usage: $0 [--local|-l] [--docker|-d] [--help|-h]"
       echo ""
       echo "Options:"
-      echo "  --docker, -d    Use Docker to build and serve (default)"
-      echo "  --local, -l     Use local Ruby/Jekyll installation"
+      echo "  --local, -l     Use local Ruby/Jekyll installation (default)"
+      echo "  --docker, -d    Use Docker to build and serve"
       echo "  --help, -h      Show this help message"
       exit 0
       ;;
@@ -63,41 +64,42 @@ if [ "$MODE" = "docker" ]; then
         echo -e "${YELLOW}Falling back to local build...${NC}"
         MODE="local"
     else
-        # Use official Jekyll Docker image
-        # Rename lock file temporarily so Docker's Bundler creates its own
-        # This avoids Bundler version conflicts (host 2.7.2 vs Docker 2.3.25)
+        # Use the Ruby version listed by GitHub Pages. Run as the host user so
+        # Docker and local builds can share generated artifacts.
         echo "Running Jekyll in Docker..."
         echo -e "${GREEN}Open ${YELLOW}${LOCAL_URL}${NC}${GREEN} in your browser.${NC}"
 
-        # Function to restore lock file on exit or interrupt
-        restore_lock() {
-            if [ -f Gemfile.lock.host ]; then
-                rm -f Gemfile.lock
-                mv Gemfile.lock.host Gemfile.lock
-                echo "Restored Gemfile.lock"
-            fi
-        }
-        trap restore_lock EXIT INT TERM
+        DOCKER_BUNDLE_CACHE="$PWD/.bundle/docker"
+        mkdir -p "$DOCKER_BUNDLE_CACHE"
 
-        # Temporarily rename host's lock file
-        if [ -f Gemfile.lock ]; then
-            mv Gemfile.lock Gemfile.lock.host
+        DOCKER_NETWORK_ARGS=()
+        DOCKER_PORT_ARGS=(-p 4000:4000)
+        DOCKER_USER_ARGS=(--user "$(id -u):$(id -g)")
+        if [ "$(uname -s)" = "Linux" ]; then
+            # Docker bridge DNS can fail on some Linux setups even when host
+            # networking works; use the host stack for local development.
+            DOCKER_NETWORK_ARGS=(--network host)
+            DOCKER_PORT_ARGS=()
         fi
 
-        # Run Docker, which will create its own lock file
         docker run --rm \
-            -p 4000:4000 \
+            "${DOCKER_NETWORK_ARGS[@]}" \
+            "${DOCKER_PORT_ARGS[@]}" \
+            "${DOCKER_USER_ARGS[@]}" \
             -v "$PWD:/srv/jekyll" \
+            -v "$DOCKER_BUNDLE_CACHE:/usr/local/bundle" \
+            -e HOME=/tmp \
+            -e BUNDLE_APP_CONFIG=/tmp/bundle-config \
             -e IO_EVENT_SELECTOR=Select \
-            jekyll/jekyll:latest \
-            sh -c "cd /srv/jekyll && bundle install && jekyll serve --host 0.0.0.0 --watch --incremental"
+            "$DOCKER_IMAGE" \
+            sh -c "mkdir -p /tmp/jekyll-bundle && cp /srv/jekyll/Gemfile /tmp/jekyll-bundle/Gemfile && cd /srv/jekyll && BUNDLE_GEMFILE=/tmp/jekyll-bundle/Gemfile sh -c 'bundle check || bundle install' && BUNDLE_GEMFILE=/tmp/jekyll-bundle/Gemfile bundle exec jekyll serve --host 0.0.0.0 --watch --incremental"
 
         exit 0
     fi
 fi
 
 if [ "$MODE" = "local" ]; then
-    echo "Building with local Ruby/Jekyll..."
+    echo "Running Jekyll locally..."
 
     # Check if bundler is installed locally
     if ! command -v bundler &> /dev/null; then
@@ -113,12 +115,6 @@ if [ "$MODE" = "local" ]; then
     else
         echo -e "${GREEN}✓ Gems already installed${NC}"
     fi
-
-    # Build site
-    bundle exec jekyll build
-
-    # Lint html output
-    bundle exec htmlproofer ./_site --disable-external
 
     # Serve on localhost with Select-based event selector
     # (liburing.so.2 may not be available in all environments)
