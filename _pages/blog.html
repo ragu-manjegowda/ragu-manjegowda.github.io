@@ -30,7 +30,7 @@ background-image: blogBg.png
       endif %}
   <hr style="margin:1em 0 1em 0;" />
 
-    <ul style="list-style-type: none;">{%
+    <ul class="blog-archive" style="list-style-type: none;">{%
       assign p = '9999'
 %}{%  for post in site.categories.blog
 %}{%    assign n = post.date | date: "%Y"
@@ -40,7 +40,7 @@ background-image: blogBg.png
       <br /><h5>{{ n }}</h5>{%
         endif %}
       <li style="padding-bottom: 6px;"><code>[{{ post.date | date: "%d %b" }}]</code>&nbsp;
-        <a href="{{ post.url | prepend: site.baseurl }}" style="white-space: nowrap;"><b>{{ post.title }}</b></a>&nbsp;
+        <a href="{{ post.url | prepend: site.baseurl }}"><b>{{ post.title }}</b></a>&nbsp;
           {{ post.excerpt | strip_html | truncatewords: 12 }}</li>{%
       endfor
 %}

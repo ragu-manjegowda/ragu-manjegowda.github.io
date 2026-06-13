@@ -23,7 +23,7 @@ article .inner .pcreds {
 %}<tr>
   <td>{{ c.for }}</td>{%
        if c.url %}
-  <td><a target="_blank" href="{{ c.url }}">{{ c.by }}</a></td>{%
+  <td><a target="_blank" rel="noopener noreferrer" href="{{ c.url }}">{{ c.by }}</a></td>{%
        else %}
   <td>{{ c.by }}</td>{%
        endif %}
@@ -34,7 +34,7 @@ article .inner .pcreds {
 %}<tr row="extra">
   <td>{{ ec.for }}</td>{%
        if ec.url %}
-  <td><a target="_blank" href="{{ ec.url }}">{{ ec.by }}</a></td>{%
+  <td><a target="_blank" rel="noopener noreferrer" href="{{ ec.url }}">{{ ec.by }}</a></td>{%
        else %}
   <td>{{ ec.by }}</td>{%
        endif %}
@@ -46,11 +46,11 @@ article .inner .pcreds {
 <h4>Inspiration</h4>
 <table class="creds"><tr><td>
 {% for i in site.data.credits.inspiration
-%}  <a target="_blank" href="{{ i.url }}">{{ i.name }}</a>{% unless forloop.last == true %},{% endunless %}{%
+%}  <a target="_blank" rel="noopener noreferrer" href="{{ i.url }}">{{ i.name }}</a>{% unless forloop.last == true %},{% endunless %}{%
    endfor %}{%
    for ei in site.data.tokens.extra-inspiration
 %},
-<a target="_blank" href="{{ ei.url }}">{{ ei.name }}</a>{%
+<a target="_blank" rel="noopener noreferrer" href="{{ ei.url }}">{{ ei.name }}</a>{%
    endfor %}
 </td></tr></table>
 
@@ -58,27 +58,27 @@ article .inner .pcreds {
 <div class="box alt"><div class="row uniform 50%">
 {% for img in site.data.credits.image-credit
 %}<div class="4u">
-  {% if img.url %}<a style="border:none !important;" href="{{ img.url }}" target="_blank"
+  {% if img.url %}<a style="border:none !important;" href="{{ img.url }}" target="_blank" rel="noopener noreferrer"
      title="{% if img.by %}{{ img.by }}, {% endif %}{%
                if img.lic %}{{ site.data.credits.licenses[img.lic].name }}{%
                else %}public domain{%
                endif %}">{%
-     endif %}<img style="width:100%"
-     src="{{ img.src | prepend: site.baseurl }}"
-     alt="the image being credited" />{% if img.url %}</a>{% endif %}
+      endif %}<img style="width:100%"
+      src="{{ img.src | prepend: site.baseurl }}"
+      alt="Credited image: {% if img.by %}{{ img.by | escape }}{% else %}public domain{% endif %}" loading="lazy" decoding="async" />{% if img.url %}</a>{% endif %}
 </div>{%
    endfor %}{%
    for eimg in site.data.tokens.extra-image-credit
 %}<div class="4u">
-  {% if eimg.url %}<a style="border:none !important;" href="{{ eimg.url }}" target="_blank"
+  {% if eimg.url %}<a style="border:none !important;" href="{{ eimg.url }}" target="_blank" rel="noopener noreferrer"
      title="{% if eimg.by %}{{ eimg.by }}, {% endif %}{%
                if eimg.lic %}{{ site.data.credits.licenses[eimg.lic].name }}{%
                elsif eimg.license %}{{ eimg.license }}{%
                else %}public domain{%
                endif %}">{%
-     endif %}<img style="width:100%"
-     src="{{ eimg.src | prepend: site.baseurl }}"
-     alt="the image being credited" />{% if eimg.url %}</a>{% endif %}
+      endif %}<img style="width:100%"
+      src="{{ eimg.src | prepend: site.baseurl }}"
+      alt="Credited image: {% if eimg.by %}{{ eimg.by | escape }}{% else %}public domain{% endif %}" loading="lazy" decoding="async" />{% if eimg.url %}</a>{% endif %}
 </div>{%
    endfor %}
 </div></div>
@@ -87,4 +87,3 @@ if site.data.tokens.other-image-credit %}
 {{ site.data.tokens.other-image-credit}}{%
 else %}{{ site.data.credits.other-image-credit}}{%
 endif %}</p>
-

@@ -1,4 +1,4 @@
 <div class="layer-image-wrapper">
-  <img src="{{ include.src | prepend: site.baseurl }}" alt="{{ include.alt }}" />
+  <img src="{{ include.src | prepend: site.baseurl }}" alt="{{ include.alt }}" loading="lazy" decoding="async" />
   <div class="layer-caption">{{ include.caption }}</div>
 </div>

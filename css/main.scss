@@ -164,6 +164,18 @@ $baseurl: '{{ site.baseurl }}/images';
 		}
 	}
 
+	.visually-hidden {
+		position: absolute !important;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	a {
 		@include vendor('transition', ('color #{_duration(transitions)} ease', 'border-bottom-color #{_duration(transitions)} ease'));
 		border-bottom: dotted 1px;
@@ -1496,7 +1508,7 @@ $baseurl: '{{ site.baseurl }}/images';
 
     // Post listing
     
-      .post-list {
+			.post-list {
 				margin: 0;
     		/* width: 100%; */
     		text-align: left;
@@ -1587,8 +1599,26 @@ $baseurl: '{{ site.baseurl }}/images';
 						}
 				
 					}
-    		}
-    	}
+				}
+			}
+
+			.blog-archive {
+				max-width: 100%;
+				overflow-wrap: anywhere;
+
+				li {
+					max-width: 100%;
+				}
+
+				code {
+					white-space: nowrap;
+				}
+
+				a {
+					overflow-wrap: anywhere;
+					word-break: break-word;
+				}
+			}
 
     // tags
       .techlist {

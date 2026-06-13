@@ -104,7 +104,19 @@ markdown: kramdown
 sass:
   style: compressed
   implementation: sassc
-exclude: ['site.bat','compose.rb','README.md']
+plugins:
+  - jekyll-feed
+exclude:
+  - site.bat
+  - compose.rb
+  - README.md
+  - .bundle
+  - .github
+  - node_modules
+  - scripts
+  - tests
+  - vendor
+  - vendor/bundle
 include: ['_pages','.htaccess']
 defaults:
   - scope:

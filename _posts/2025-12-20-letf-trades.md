@@ -176,9 +176,15 @@ function updateChartFullscreenButtons() {
 
 function resizeChartFrame(frame) {
   var iframe = activeChartFullscreen && activeChartFullscreen.frame === frame ? activeChartFullscreen.iframe : frame.querySelector('iframe');
-  if (!iframe || !iframe.contentWindow || !iframe.contentDocument) return;
+  if (!iframe) return;
 
-  var graph = iframe.contentDocument.querySelector('.plotly-graph-div');
+  var graph;
+  try {
+    if (!iframe.contentWindow || !iframe.contentDocument) return;
+    graph = iframe.contentDocument.querySelector('.plotly-graph-div');
+  } catch (error) {
+    return;
+  }
   if (!graph) return;
 
   graph.style.width = '100%';
@@ -260,13 +266,19 @@ function enterChartFullscreen(frame) {
   updateChartFullscreenButtons();
   resizeChartFrames();
 
-  if (shell.requestFullscreen) {
-    shell.requestFullscreen();
+  var requestFullscreen = shell.requestFullscreen || shell.webkitRequestFullscreen;
+  if (!requestFullscreen) {
+    restoreChartFullscreen();
     return;
   }
 
-  if (shell.webkitRequestFullscreen) {
-    shell.webkitRequestFullscreen();
+  try {
+    var result = requestFullscreen.call(shell);
+    if (result && result.catch) {
+      result.catch(restoreChartFullscreen);
+    }
+  } catch (error) {
+    restoreChartFullscreen();
   }
 }
 

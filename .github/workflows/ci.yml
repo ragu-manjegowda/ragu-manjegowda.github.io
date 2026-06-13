@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    name: Build Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Build production site
+        run: bash scripts/ciBuild.sh build
+
+      - name: Upload generated site
+        uses: actions/upload-artifact@v6
+        with:
+          name: generated-site
+          path: _site
+          retention-days: 1
+
+  site-tests:
+    name: Site Regression Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Download generated site
+        uses: actions/download-artifact@v7
+        with:
+          name: generated-site
+          path: _site
+
+      - name: Run site regression tests
+        run: bash scripts/ciBuild.sh site-tests
+
+  theme-tests:
+    name: Theme Contract Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Download generated site
+        uses: actions/download-artifact@v7
+        with:
+          name: generated-site
+          path: _site
+
+      - name: Run theme contract tests
+        run: bash scripts/ciBuild.sh theme-tests
+
+  http-check:
+    name: Insecure Link Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Download generated site
+        uses: actions/download-artifact@v7
+        with:
+          name: generated-site
+          path: _site
+
+      - name: Check generated href/src URLs
+        run: bash scripts/ciBuild.sh http-check
+
+  htmlproofer:
+    name: HTML-Proofer
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Download generated site
+        uses: actions/download-artifact@v7
+        with:
+          name: generated-site
+          path: _site
+
+      - name: Run HTML-Proofer
+        run: bash scripts/ciBuild.sh htmlproofer

@@ -62,9 +62,36 @@
 					offset: $header.outerHeight()
 				});
 
+			$('a[href^="http://"], a[href^="https://"]')
+				.not('[href^="' + window.location.origin + '"]')
+				.each(function() {
+					var $link = $(this),
+						rel = ($link.attr('rel') || '').split(/\s+/),
+						addRel = function(value) {
+							if ($.inArray(value, rel) === -1)
+								rel.push(value);
+						};
+
+					addRel('noopener');
+					addRel('noreferrer');
+
+					$link
+						.attr('target', '_blank')
+						.attr('rel', $.trim(rel.join(' ')));
+				});
+
 		// Menu.
-			$('#menu')
-				.append('<a href="#menu" class="close"></a>')
+			var $menu = $('#menu'),
+				$menuToggle = $('.menuToggle'),
+				syncMenuState = function() {
+					var isVisible = $body.hasClass('is-menu-visible');
+
+					$menuToggle.attr('aria-expanded', isVisible ? 'true' : 'false');
+					$menu.attr('aria-hidden', isVisible ? 'false' : 'true');
+				};
+
+			$menu
+				.append('<a href="#menu" class="close" aria-label="Close menu"></a>')
 				.appendTo($body)
 				.panel({
 					delay: 500,
@@ -76,6 +103,15 @@
 					target: $body,
 					visibleClass: 'is-menu-visible'
 				});
+
+			$menuToggle.on('click', function() {
+				window.setTimeout(syncMenuState, 0);
+			});
+
+			if ('MutationObserver' in window)
+				new MutationObserver(syncMenuState).observe($body[0], { attributes: true, attributeFilter: ['class'] });
+
+			syncMenuState();
 
 		// Header.
 			if (skel.vars.IEVersion < 9)
