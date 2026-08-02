@@ -84,6 +84,12 @@ class ThemeContractTest < Minitest::Test
 		assert_declaration '.wrapper.style5 .layer-caption', 'color', 'var(--theme-fg-light)'
 	end
 
+	def test_about_portrait_is_viewport_friendly
+		assert_declaration '.wrapper.style5 .about-portrait', 'max-width', '16rem'
+		assert_declaration '.wrapper.style5 .about-portrait', 'margin-left', 'auto'
+		assert_declaration '.wrapper.style5 .about-portrait', 'margin-right', 'auto'
+	end
+
 	def test_blog_archive_titles_wrap_within_mobile_viewport
 		assert_any_declaration '.wrapper.style5 .blog-archive', 'max-width', '100%'
 		assert_any_declaration '.wrapper.style5 .blog-archive', 'overflow-wrap', 'anywhere'
