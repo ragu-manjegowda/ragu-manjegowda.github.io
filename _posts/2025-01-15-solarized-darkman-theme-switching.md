@@ -34,15 +34,15 @@ The colors are based on CIELAB color space theory and have been refined over yea
 ### **Solarized Palette**
 
 ```
-Base colors (Light variant):
-- Base03 (background):     #fdf6e3 (warm white)
-- Base02 (secondary bg):   #eee8d5 (off-white)
-- Base01 (comments):       #93a1a1 (light gray)
-- Base00 (secondary fg):   #839496 (medium gray)
-- Base0 (content):         #657b83 (dark gray)
-- Base1 (secondary content): #586e75 (darker gray)
-- Base2 (primary fg):      #073642 (dark blue-green)
-- Base3 (foreground):      #002b36 (very dark blue-green)
+Solarized base colors, from lightest to darkest:
+- base3:   #fdf6e3    light background
+- base2:   #eee8d5    light secondary background / icon ink on dark panels
+- base1:   #93a1a1
+- base0:   #839496
+- base00:  #657b83
+- base01:  #586e75
+- base02:  #073642    dark secondary background / icon ink on light panels
+- base03:  #002b36    dark background
 
 Accent colors:
 - red, orange, yellow, green, cyan, blue, violet, magenta
@@ -54,19 +54,7 @@ The beauty of Solarized is that **the same accent colors work perfectly in both 
 
 ## What is Darkman?
 
-**Darkman** is a lightweight systemd timer + service that manages light/dark theme switching across your entire system. It:
-
-- **Monitors time of day** (or geolocation via GeoClue) and triggers theme changes
-- **Executes custom scripts** when switching themes via systemd units
-- **Integrates with D-Bus** for IPC with applications
-- **Works with any WM/DE** (X11, Wayland, standalone tiling WMs)
-- **Zero configuration** for basic usage; fully customizable via shell scripts
-
-Darkman is perfect for keyboard-driven workflows because it's:
-- **Systemd-based** (runs as user service timer, no background daemon)
-- **Scriptable** (everything is shell scripts)
-- **Event-driven** (reacts to time changes via systemd timer)
-- **Non-intrusive** (no window managers, panels, or indicators)
+**Darkman** runs as a user service. It switches modes at sunrise and sunset using configured coordinates or GeoClue, and I can override it with `darkman toggle`. Darkman decides *when* to switch; each application decides *how* to apply the change.
 
 ---
 
@@ -86,10 +74,9 @@ Darkman stores configuration and theme scripts in two locations:
 ```
 ~/.local/share/light-mode.d/       # Scripts to run on light mode
 ├── set-alacritty-theme.sh         # Terminal color scheme
-├── set-awesomewm-icons-theme.sh   # WM theme + SVG/PNG recoloring
-├── set-gtk-theme.sh               # GTK2/3 theme switching
+├── set-gtk-theme.sh               # GTK settings + desktop color-scheme preference
 ├── set-rofi-theme.sh              # Application menu themes
-├── set-neovim-theme.sh            # Editor colorscheme
+├── set-vim-theme.sh               # Editor colorscheme
 ├── set-tmux-theme.sh              # Terminal multiplexer colors
 ├── set-ranger-theme.sh            # File manager colors
 ├── set-zathura-theme.sh           # PDF viewer colors
@@ -122,14 +109,18 @@ This allows you to **version-control scripts in `~/.config/darkman/`** while Dar
 
 ### **How It Works**
 
-1. **Darkman systemd timer** runs at scheduled intervals (calculated from geolocation + sunrise/sunset)
-2. **Monitors time** (or geolocation + sunrise/sunset times)
-3. **At threshold time** (e.g., 6:00 AM → light, 6:00 PM → dark):
-   - Systemd timer triggers `darkman.service`
-   - Executes `/usr/bin/darkman apply light` or `darkman apply dark`
-   - Runs all scripts from `~/.local/share/light-mode.d/` or `dark-mode.d/`
-4. **Each script** updates configuration files or sends signals to applications
-5. **Applications reload** or respond to signals automatically
+1. At sunrise, sunset, or a manual toggle, Darkman runs the executable hooks for the selected mode.
+2. My GTK hook writes `prefer-light` or `prefer-dark` to the `color-scheme` key in the `org.gnome.desktop.interface` GSettings schema.
+3. AwesomeWM listens to that key through Gio and repaints the running desktop. It doesn't need its own Darkman hook.
+4. Other applications still use their own mechanisms. For example, the Rofi hook edits its configuration for the next menu invocation.
+
+<figure class="layer-image-wrapper">
+  <picture>
+    <source media="(prefers-reduced-motion: no-preference)" srcset="{{ '/images/darkman-workspace-theme-switch.gif' | relative_url }}" width="1152" height="768">
+    <img src="{{ '/images/darkman-workspace-themes.webp' | relative_url }}" width="1152" height="404" loading="lazy" alt="The same AwesomeWM workspace in Solarized Dark and Light, with Alacritty on the left and a PDF open in Sioyek on the right.">
+  </picture>
+  <figcaption class="layer-caption">I ran <code>darkman set light</code>, then <code>darkman set dark</code> in the background. Watch the top bar, the terminal background, and the PDF page: all three change without reopening either window. <a href="{{ '/images/darkman-workspace-theme-switch.gif' | relative_url }}">Open the GIF.</a></figcaption>
+</figure>
 
 ---
 
@@ -140,8 +131,8 @@ All Darkman configuration is stored in [`~/.config/darkman/`](https://github.com
 ### **config.yaml**
 
 ```yaml
-# Geolocation coordinates (North Pole)
-lat: 90
+# Example coordinates; replace with yours
+lat: 45
 lng: 0
 usegeoclue: false  # Manual lat/lng instead of GeoClue daemon
 ```
@@ -150,10 +141,10 @@ Darkman calculates sunrise/sunset times from coordinates, then:
 - Switches to **light mode at sunrise** (e.g., 6:00 AM)
 - Switches to **dark mode at sunset** (e.g., 6:00 PM)
 
-You can also manually toggle (no systemd timer needed):
+You can also select a mode explicitly or toggle the current one:
 ```bash
-darkman apply light
-darkman apply dark
+darkman set light
+darkman set dark
 darkman toggle
 ```
 
@@ -175,90 +166,38 @@ export BAT_THEME="Solarized (light)"
 - Updates Alacritty config to use Solarized Light colorscheme
 - Sets `BAT_THEME` for `bat` (cat replacement) syntax highlighting
 
-**Result**: Terminal colors instantly switch on next application launch, or reload Alacritty for immediate effect.
+**Result**: On my setup, the open Alacritty window picks up the new colors without a restart, as the recording shows.
 
 ### **2. Window Manager Icons & Colors (AwesomeWM)**
 
-```bash
-#!/bin/bash
+**November 2026 update:** I removed the hook that rewrote AwesomeWM's icons and asked me to reload. The running WM now reads the desktop preference directly. In [`theme/init.lua`](https://github.com/ragu-manjegowda/config/blob/master/.config/awesome/theme/init.lua), I keep one `Gio.Settings` object alive through LGI. Once the schema and key have been checked, the same callback handles startup and later changes:
 
-# Recolor SVG icons: swap Solarized base03 (light bg) with base2 (dark fg)
-for i in $(find $HOME/.config/awesome/ -name "*.svg"); do
-    sed -i -e "s/fill:#eee8d5/fill:#073642/" $i
-    sed -i -e 's/fill="#eee8d5"/fill="#073642"/' $i
-done
-
-# Recolor PNG icons using ImageMagick
-for i in $(find $HOME/.config/awesome/ -name "*.png" \
-            -not -path "*/widget/vpn/icons/*" \
-            -not -path "*/configuration/user-profile/*" \
-            -not -path "*/library/*" \
-            -not -path "*/widget/playerctl/*"); do
-    magick $i -fill "#073642" -colorize 100% $i
-done
-
-# Update theme Lua config
-config_path="$HOME/.config/awesome/theme/init.lua"
-sed -i -e "s/-dark-/-light-/" $config_path
-
-# Notify user to reload AwesomeWM
-notify-send -u critical -a awesome \
-    -i ~/.config/awesome/theme/icons/awesome.svg "Reload awesome to load light theme"
+```lua
+settings = Gio.Settings.new_full(schema, nil, nil)
+local function changed()
+    apply(settings:get_string('color-scheme'))
+end
+settings.on_changed['color-scheme'] = changed
+changed()
 ```
 
-**What it does**:
-- **SVG recoloring**: Uses `sed` to swap hex color codes in icon files
-- **PNG recoloring**: Uses ImageMagick's `-colorize` to tint all PNG icons
-- **Theme config**: Updates Lua theme file to toggle `-dark-` ↔ `-light-`
-- **Notification**: Sends D-Bus notification reminding user to reload AwesomeWM (Super+Control+r)
+`prefer-light` selects Solarized Light. For `prefer-dark`, `default`, or a missing schema or key, my config uses Solarized Dark. When the variant changes, `apply` loads the palette into `beautiful` and calls `theme.bindings.refresh()`. The top bar, open panels, and notifications repaint without polling or restarting AwesomeWM.
 
-**Result**: All WM icons and panels switch colors; user reloads WM to see changes live.
+The icons follow the palette without changing the files in Git. My [`theme.symbolic` imagebox](https://github.com/ragu-manjegowda/config/blob/master/.config/awesome/theme/symbolic.lua) maps the designated SVG foreground (`#073642` in the source) to the current foreground, leaving accents such as warning colors alone. For monochrome PNGs it tints the alpha mask in memory. I use ordinary imageboxes for application icons, photos, and album art so they keep their original colors.
 
 ### **3. GTK Theme (Global Application Look)**
 
-```bash
-#!/bin/zsh
+My [light-mode GTK hook](https://github.com/ragu-manjegowda/config/blob/master/.config/darkman/light-mode.d/set-gtk-theme.sh) still updates GTK settings, icon and cursor themes, and XSettings. This excerpt shows the part that publishes the preference AwesomeWM reads:
 
-gtk2_config_path="$HOME/.gtkrc-2.0"
-gtk3_config_path="$HOME/.config/gtk-3.0/settings.ini"
-icon_config_path="$HOME/.icons/default/index.theme"
-xdg_config_path="$HOME/.config/xsettingsd/xsettingsd.conf"
-
-# Switch theme names
-sed -i -e "s#DarkGreen#LightBlue#g" $gtk2_config_path
-sed -i -e "s#Solarized-Dark-Green-Numix#Solarized-FLAT-Blue#g" $gtk2_config_path
-
-sed -i -e "s#DarkGreen#LightBlue#g" $gtk3_config_path
-sed -i -e "s#Solarized-Dark-Green-Numix#Solarized-FLAT-Blue#g" $gtk3_config_path
-
-# Switch cursor themes (must use precise regex to avoid duplication)
-sed -i -e 's/"Numix-Cursor"/"Numix-Cursor-Light"/g' $gtk2_config_path
-sed -i -e 's/Numix-Cursor$/Numix-Cursor-Light/g' $gtk3_config_path
-sed -i -e 's/Numix-Cursor$/Numix-Cursor-Light/g' $icon_config_path
-
-# Reload GTK settings daemon
-if ! pgrep -x "xsettingsd" > /dev/null; then
-    xsettingsd &
-else
-    killall -HUP xsettingsd
+```sh
+if ! pgrep -x gsettings > /dev/null; then
+    gsettings set org.gnome.desktop.interface icon-theme "Solarized-FLAT-Blue"
+    gsettings set org.gnome.desktop.interface gtk-theme "NumixSolarizedLightBlue"
 fi
-
-# Force cursor theme update (workaround for some apps)
-if command -v lxappearance &> /dev/null; then
-    lxappearance &
-    sleep 0.2
-    killall lxappearance
-fi
+gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
 ```
 
-**What it does**:
-- **GTK2/3 theme switching**: Updates color scheme names in config files
-- **Icon theme switching**: Changes icon set (dark vs. light variants)
-- **Cursor theme switching**: Updates mouse cursor appearance
-- **Signal reload**: Sends HUP to `xsettingsd` to reload X11 settings
-- **Workaround for cursor**: Opens/closes lxappearance to force root window cursor update
-
-**Result**: All GTK applications (file managers, settings, etc.) instantly switch themes; no restart needed.
+The dark-mode hook writes `prefer-dark` instead. The last write belongs **outside** the guard: even a read-only `gsettings monitor` matches `pgrep -x gsettings`. Putting it inside would mean that watching the switch to debug it could prevent the switch itself.
 
 ### **4. Application Launcher (Rofi)**
 
@@ -285,15 +224,11 @@ done
 ```bash
 #!/bin/zsh
 
-neovim_config_path="$HOME/.config/nvim/init.lua"
-sed -i -e "s#Solarized-dark#Solarized-light#g" $neovim_config_path
+vim_config_path="$HOME/.config/nvim/lua/user/colorscheme.lua"
+sed -i -e "s#background=dark#background=light#g" "$vim_config_path"
 ```
 
-**What it does**:
-- Updates Neovim colorscheme setting in Lua config
-- Neovim detects config change and reloads (or reload via `:e` in editor)
-
-**Result**: Editor syntax highlighting switches to light Solarized palette.
+Unlike the AwesomeWM listener, this hook edits a file. The next Neovim session starts with the selected background.
 
 ### **6. Terminal Multiplexer (Tmux)**
 
@@ -326,8 +261,8 @@ Similar scripts exist for:
 
 **6:00 AM** (sunrise):
 - Darkman detects sunrise time
-- Executes all scripts in `~/.config/darkman/light-mode.d/`
-- Terminal, icons, GTK apps, rofi menus, editor all switch to Solarized Light
+- The light-mode hooks run; the GTK hook publishes `prefer-light`
+- The top bar and its symbolic icons switch to Solarized Light, even if the info center is open
 - You notice your coffee spilling on a suddenly bright desktop and laugh ☀️
 
 **2:00 PM** (midday, coding in sunlight):
@@ -338,7 +273,7 @@ Similar scripts exist for:
 **6:00 PM** (sunset):
 - Darkman detects sunset time
 - Executes all scripts in `~/.config/darkman/dark-mode.d/`
-- Everything switches to Solarized Dark
+- The GTK hook publishes `prefer-dark`; AwesomeWM repaints with Solarized Dark
 - Reduced blue light for evening/night work
 - 🌙 More comfortable for late-night coding sessions
 
@@ -346,7 +281,7 @@ Similar scripts exist for:
 ```bash
 darkman toggle
 ```
-Instantly switches everything if you need to override the time-based schedule.
+This takes the same path as a scheduled switch. AwesomeWM repaints immediately; applications whose hooks only edit files may not pick up the change until their next launch.
 
 ---
 
@@ -355,8 +290,7 @@ Instantly switches everything if you need to override the time-based schedule.
 ### **Per-Application Customization**
 
 Each script can do complex logic:
-- **ImageMagick recoloring**: Transform PNGs from dark to light
-- **SVG color swapping**: Parse and update fill/stroke colors
+- **Desktop preference**: Publish one GSettings value for listeners instead of rewriting their assets
 - **Signal sending**: Use `notify-send` for D-Bus notifications
 - **Daemon control**: Start/restart services with proper checks (`pgrep`)
 - **File parsing**: Use `sed` to update TOML, YAML, INI, Lua, shell config files
@@ -382,29 +316,11 @@ Beyond time-based switching, you can manually integrate with:
 
 ### **Darkman + AwesomeWM**
 
-The notification from `set-awesomewm-icons-theme.sh` reminds you to reload AwesomeWM:
-
-```bash
-notify-send -u critical -a awesome \
-    -i ~/.config/awesome/theme/icons/awesome.svg \
-    "Reload awesome to load light theme"
-```
-
-Then simply press `Super+Control+r` (AwesomeWM reload) and the WM instantly switches themes without restarting or losing any windows.
+To see the difference, leave the info center open when the mode switches. Its background and cards change together, and the mail icon changes foreground without losing its unread indicator. There's no reload shortcut to press. The [AwesomeWM setup post]({% post_url 2021-10-20-awesomewm-keyboard-driven-event-first-setup %}#live-theme-changes) shows how I bind widgets to theme roles.
 
 ### **Darkman + Neovim**
 
-Neovim config watches for theme changes. You can add an autocommand:
-
-```lua
--- In ~/.config/nvim/init.lua
-vim.o.background = 'light'  -- or 'dark'
-
--- Auto-reload colorscheme on config change
-vim.cmd.colorscheme('solarized')
-```
-
-Or manually reload with `:colorscheme solarized` in editor.
+For an already-open editor, I can use `:set background=light` or `:set background=dark` without waiting for a new session.
 
 ---
 
@@ -416,7 +332,7 @@ Or manually reload with `:colorscheme solarized` in editor.
 | **Applications covered** | Manual per-app | 15+ apps, one command |
 | **Consistency** | Easy to miss an app | All synchronized |
 | **Eye strain** | High (wrong theme for lighting) | Minimized (theme matches environment) |
-| **Configuration** | Scattered across dotfiles | Centralized in `~/.config/darkman/` |
+| **Configuration** | Choose a mode separately in each app | Darkman selects the mode; each app owns its palette |
 | **Integration with workflow** | Interrupts focus | Invisible, automatic |
 
 ---
@@ -441,7 +357,7 @@ sudo pacman -S darkman
    usegeoclue: false
    ```
 
-2. **Create theme scripts** in `~/.config/darkman/light-mode.d/` and `~/.config/darkman/dark-mode.d/`
+2. **Create executable theme scripts** in `~/.config/darkman/light-mode.d/` and `~/.config/darkman/dark-mode.d/`. To drive the AwesomeWM setup above, the light hook only needs to run `gsettings set org.gnome.desktop.interface color-scheme prefer-light`; use `prefer-dark` in the dark hook.
 
 3. **Create symlinks** so Darkman can find the scripts (XDG standard location):
    ```bash
@@ -450,10 +366,9 @@ sudo pacman -S darkman
    ln -s ~/.config/darkman/dark-mode.d ~/.local/share/dark-mode.d
    ```
 
-4. **Enable the systemd timer**:
+4. **Enable the user service**:
    ```bash
-   systemctl --user enable --now darkman.timer
-   systemctl --user status darkman.timer
+   systemctl --user enable --now darkman.service
    ```
 
 5. **Test theme switching**:
@@ -464,18 +379,16 @@ sudo pacman -S darkman
 ### **Debugging**
 
 ```bash
-# Check systemd timer status
-systemctl --user status darkman.timer
-systemctl --user list-timers darkman.timer
-
-# View systemd service logs
+# Is the service running, and which mode did it choose?
+systemctl --user status darkman.service
+darkman get
 journalctl --user -u darkman.service -f
 
-# Manually trigger light mode
-darkman apply light
+# Did the GTK hook publish the matching desktop preference?
+gsettings get org.gnome.desktop.interface color-scheme
 
-# Manually trigger dark mode
-darkman apply dark
+# Leave this running; use 'darkman toggle' in another terminal
+gsettings monitor org.gnome.desktop.interface color-scheme
 
 # Check symlinks are correct
 ls -la ~/.local/share/light-mode.d
@@ -487,7 +400,7 @@ ls -la ~/.local/share/dark-mode.d
 ## Why This Matters for Keyboard-Driven Development
 
 Darkman exemplifies keyboard-driven philosophy:
-- **No mouse/UI**: Everything is daemon + shell scripts
+- **No mouse/UI**: One command switches modes; AwesomeWM receives the change directly
 - **Event-driven**: Reacts to time, not polling
 - **Scriptable**: You own and control the behavior
 - **Zero distractions**: Invisible, automatic theme adaptation
@@ -501,13 +414,7 @@ Combined with Solarized's precision color theory, you get a desktop environment 
 
 Solarized + Darkman creates a **cohesive, adaptive visual experience** across your entire terminal-first workflow. Rather than fighting your environment's lighting, your desktop automatically optimizes for it.
 
-The beauty is in the **simplicity**: geolocation coordinates, shell scripts, and a few hundred lines of `sed` commands give you a professional, polished theme switching system that's:
-- ✅ Completely automatic
-- ✅ Works across 15+ applications
-- ✅ Respects your keyboard-driven philosophy
-- ✅ Infinitely customizable
-
-Set it up once, then forget about it. Your desktop will just *look right* all day long.
+The useful split is between choosing a mode and drawing it. Darkman and its hooks handle the first part. AwesomeWM owns the second, so changing the mode doesn't require changing a single tracked icon or interrupting the session.
 
 ---
 

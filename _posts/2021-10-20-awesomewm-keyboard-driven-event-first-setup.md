@@ -23,7 +23,7 @@ Key differences across popular window managers:
 |--------|---------|---------|-------|-----|--------|-----------|
 | **Config Format** | Text files | XML | TOML/Shell | C code (recompile!) | Haskell code | Lua programming |
 | **Extensibility** | Limited | Limited | Shell scripts | Source rebuild required | Haskell knowledge | Unlimited Lua |
-| **Dynamic Changes** | Reload required | Reload required | Reload required | Full recompile! | Full recompile! | Live reload, no restart |
+| **Dynamic Changes** | Reload required | Reload required | Reload required | Full recompile! | Full recompile! | Running widgets can respond to signals |
 | **Data Structures** | Key-value | XML nodes | Shell vars | Structs | Haskell types | Tables, metatables, OOP |
 | **Scripting Capability** | No | No | Limited (shell) | No (C required) | No (Haskell required) | Full Lua standard library |
 | **Built-in Status Bar** | No (need polybar) | No (need external) | No (need lemonbar) | No (need suckless) | No (need xmobar) | Yes (Wibox) |
@@ -32,7 +32,7 @@ This means I'm not just configuring AwesomeWM—**I'm programming a full desktop
 - **dwm/Xmonad require recompilation** for any change, making experimentation tedious
 - **i3/sway are static** and limited to predefined options
 - **bspwm uses shell scripts**, which is less powerful than a real language
-- **AwesomeWM offers live Lua reloading** and unlimited flexibility
+- **AwesomeWM lets Lua update the running UI** in response to events
 
 I can:
 - Implement complex algorithms (e.g., smart tag jumping that skips empty workspaces)
@@ -160,7 +160,7 @@ The longevity means your AwesomeWM configuration will continue to work for years
 
 ### **8. LuaJIT Compilation for Performance**
 
-AwesomeWM uses **LuaJIT** (Just-In-Time compilation) for Lua code, resulting in:
+My AwesomeWM build uses **LuaJIT** (Just-In-Time compilation) for Lua code, resulting in:
 - **10-100× faster Lua execution** vs. interpreted Lua (even faster than C for hot code paths)
 - **Fast keybinding response** (<5ms latency)
 - **Low memory overhead** (15-20 MB total with 40+ widgets running)
@@ -228,10 +228,12 @@ Since 2020, I've built a heavily customized setup from the **[surreal theme](htt
 │   ├── clock/                       # Dynamic clock widget
 │   ├── playerctl-center-toggle/     # Music player control widget
 │   └── ...                          # RAM, disk, airplane mode, stocks, etc.
-├── theme/                           # Visual assets
-│   ├── theme.lua                    # Theme engine (colors, fonts, DPI scaling)
+├── theme/                           # Solarized palettes and visual assets
+│   ├── init.lua                     # Read and watch the desktop color scheme
+│   ├── bindings.lua                 # Refresh widget properties by palette role
+│   ├── symbolic.lua                 # Render theme-colored icons in memory
 │   ├── wallpapers/                  # Dynamic wallpaper schedule images
-│   └── icons/                       # SVG icons for all widgets
+│   └── icons/                       # Shared icon assets
 ├── layout/                          # Custom layout engines
 ├── library/                         # Reusable Lua utilities (bling, battery, utils)
 ├── utilities/                       # Shell scripts for system integration
@@ -554,6 +556,19 @@ awful.key({ modkey, 'Control' }, 'd',
 ### **3. Event-Driven Signals and Performance**
 
 Unlike polling-based window managers, AwesomeWM uses **signals** to react to system state changes.
+
+#### **Live Theme Changes**
+
+**November 2026 update:** If the desktop switches to dark mode while my info center is open, its panel and cards repaint in place. I don't restart AwesomeWM or give each widget a settings listener. One `Gio.Settings` object in `theme/init.lua` reads `org.gnome.desktop.interface color-scheme` at startup and listens for changes through LGI. This works with both Lua and LuaJIT.
+
+The widgets describe which colors they use, rather than saving a hex value at construction. For example, the info center binds its foreground like this:
+
+```lua
+local bindings = require('theme.bindings')
+bindings.bind(panel, { fg = 'fg_normal' })
+```
+
+When the palette changes, the binding reapplies `fg_normal` to that same panel. Symbolic icons use the same refresh path; application icons and album covers keep their own colors. The [Darkman walkthrough]({% post_url 2025-01-15-solarized-darkman-theme-switching %}#how-it-works) shows how the preference gets set and how to watch it change.
 
 #### **Battery Widget (Real-Time Updates, No Polling)**
 
@@ -904,7 +919,7 @@ Adding a new feature is trivial:
 1. **Create a module**: `~/.config/awesome/module/my-feature.lua`
 2. **Emit signals**: `awesome.emit_signal('module::my_feature:update', data)`
 3. **Connect in rc.lua**: `require('module.my-feature')`
-4. **No restart needed** — AwesomeWM picks it up on reload (Super+Control+r)
+4. **Load the new code** with `Super+Control+r`, which restarts AwesomeWM. Switching between the light and dark palettes does not require this step.
 
 ---
 
