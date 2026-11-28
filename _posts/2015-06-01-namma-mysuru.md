@@ -3,7 +3,8 @@ priority: 0.6
 title: Namma Mysuru
 excerpt: Android Application with backend server
 categories: projects
-background-image: nammaMysuru.png
+image: /images/nammaMysuru.png
+banner: /images/banners/mysuru.svg
 tags:
   - Android
   - Python

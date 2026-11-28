@@ -2,7 +2,8 @@
 title: "AwesomeWM: A Keyboard-Driven, Event-First Window Manager Setup"
 tags: [awesomewm, tiling, linux, lua, keyboard-driven, solarized, productivity, signals, event-loop]
 categories: blog
-background-image: awesome.jpg
+image: /images/awesome.jpg
+banner: /images/banners/tiling.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 7

@@ -1,0 +1,22 @@
+---
+layout: banner
+description: "A camera aperture and a sensor pixel array"
+---
+<pattern id="pixels" x="13" y="13" width="24" height="24" patternUnits="userSpaceOnUse">
+  <rect class="green" width="24" height="24"/><rect class="blue" width="12" height="12"/><rect class="violet" x="12" y="12" width="12" height="12"/>
+</pattern>
+<g id="left" class="art">
+  <g transform="translate(10 101)">
+    <path class="panel" d="M0 34q0-10 11-10h42L63 8h64l11 16h42q11 0 11 12v76q0 10-11 10H11q-11 0-11-10z"/>
+    <circle class="blue" cx="94" cy="71" r="44"/><circle class="paper" cx="94" cy="71" r="34"/>
+    <g transform="translate(94 71)"><path class="green" d="m-13-16 20-4 13 14-6 19-21 5-13-16z"/><path d="m-13-16 8-17m12 13 18-3m-5 17 12 13m-18 6 1 18m-22-13-16 6m3-22-11-11"/></g>
+    <rect class="violet" x="149" y="36" width="26" height="15" rx="4"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(138 31) rotate(7 60 60)">
+    <rect class="panel" width="123" height="123" rx="9"/>
+    <rect x="13" y="13" width="97" height="97" fill="url(#pixels)"/>
+    <path class="detail" d="M17 133h89m-89 8h53"/>
+  </g>
+</g>

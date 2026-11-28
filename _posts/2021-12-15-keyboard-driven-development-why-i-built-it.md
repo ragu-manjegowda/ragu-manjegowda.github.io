@@ -2,7 +2,8 @@
 title: "Keyboard-Driven Development: Why I Built It"
 tags: [ergonomics, keyboards, workflow, productivity, colemak, tmux, neovim, awesomewm]
 categories: blog
-background-image: keyboard-driven-development.jpg
+image: /images/keyboard-driven-development.jpg
+banner: /images/banners/keybindings.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 1

@@ -4,9 +4,8 @@ title: Android TV Remote
 excerpt: A keyboard-driven Qt remote for Arch Linux, with a trackpad for NVIDIA Shield TV.
 categories: projects
 tags: [Arch Linux, Android TV, NVIDIA Shield, Python, Qt]
-image: android-tv-remote.png
-background-image: android-tv-remote-banner.svg
-themed-banner: true
+image: /images/android-tv-remote.png
+banner: /images/android-tv-remote-banner.svg
 demo_url: /projects/android-tv-remote/demo/
 ---
 

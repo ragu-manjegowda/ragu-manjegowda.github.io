@@ -1,0 +1,15 @@
+---
+layout: banner
+description: "An ink pen on ruled paper and a moon over low hills"
+---
+<g id="left" class="art">
+  <g transform="translate(19 134) rotate(-7)">
+    <path class="paper" d="M0 0h169l17 18v85H0z"/><path class="detail" d="M17 25h90M17 42h124M17 60h87m-87 17h60"/>
+    <path class="blue" d="m94 55 4-25 48-45 13 14-48 45z"/><path d="m94 55 12-16"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <path class="green" d="M223 34a42 42 0 1 0 42 56 40 40 0 0 1-42-56z"/>
+  <path class="blue" d="M77 148q32-36 68-23t59-8q41-25 101-5v29q-47-12-86 5t-75 0q-35-8-67 2z"/>
+  <path class="detail" d="M107 160q31-11 63 0m81-4q23-10 50-7M161 42v10m-5-5h10m107-19v8m-4-4h8"/>
+</g>

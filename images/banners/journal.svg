@@ -1,0 +1,16 @@
+---
+layout: banner
+description: "An open journal, a pencil and a stack of notebooks"
+---
+<g id="left" class="art">
+  <g transform="translate(10 108) rotate(-7 98 60)">{% include banner/book.svg %}</g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(110 45) rotate(8 83 50)">
+    <rect class="violet" x="6" y="27" width="157" height="84" rx="5"/>
+    <rect class="blue" x="2" y="14" width="157" height="84" rx="5"/>
+    <rect class="green" width="157" height="84" rx="5"/>
+    <path d="M22 0v84m102-84v84"/><path class="detail" d="M39 25h60m-60 9h42"/>
+  </g>
+  <path class="paper" d="m95 138 79-84 8 8-79 84-14 6z"/>
+</g>

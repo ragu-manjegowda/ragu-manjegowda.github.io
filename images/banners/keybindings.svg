@@ -1,0 +1,18 @@
+---
+layout: banner
+description: "A keyboard connected to a chain of shortcuts"
+---
+<g id="left" class="art">
+  <g transform="translate(9 126) rotate(-6 119 45)">
+    {% include banner/keys.svg %}
+    <rect class="green" x="24" y="33" width="27" height="23" rx="3"/><rect class="blue" x="78" y="33" width="27" height="23" rx="3"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(74 53)">
+    <path class="detail" d="M33 28h111q23 0 23 23v29h-47"/>
+    <rect class="green" width="66" height="55" rx="8"/><rect class="blue" x="87" width="66" height="55" rx="8"/>
+    <rect class="violet" x="42" y="67" width="79" height="44" rx="8"/>
+    <g class="label" text-anchor="middle"><text x="33" y="34">Ctrl</text><text x="120" y="34">B</text><text x="81" y="95">Esc</text></g>
+  </g>
+</g>

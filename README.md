@@ -9,6 +9,15 @@ Ragu's personal web site, using the design of http://html5up.net/spectral
 by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by 
 [@arkadianriver](https://arkadianriver.github.io/arkadianriver.com/).
 
+## Themed banners
+
+The homepage keeps its original photograph. For an interior page or post, set
+`banner: /images/banners/journal.svg` in its front matter, or choose another SVG under `images/`.
+Use a site-relative bitmap path such as `image: /images/blog.png` for social previews, feed images, and landing-page thumbnails.
+To draw a new banner, add an SVG under `images/banners/` with `layout: banner`, a `description`, and
+two groups named `left` and `right`. Draw each corner on a 320 × 240 canvas and use the shared palette
+classes from `_layouts/banner.html`. Jekyll emits a standalone SVG that follows the reader’s color scheme.
+
 ## Build Instructions
 
 ## 1. Local

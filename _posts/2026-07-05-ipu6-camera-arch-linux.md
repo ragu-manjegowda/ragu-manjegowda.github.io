@@ -2,7 +2,8 @@
 title: "Intel IPU6 Camera on Arch Linux: Current Setup After Kernel 6.18.3"
 tags: [arch-linux, linux, ipu6, webcam, libcamera, pipewire, gstreamer, v4l2loopback]
 categories: blog
-background-image: ipu6.png
+image: /images/ipu6.png
+banner: /images/banners/camera.svg
 excerpt: "The current Arch Linux setup I use for Intel IPU6 webcams now that the kernel driver is upstream: libcamera, GStreamer, and v4l2loopback, with notes on the older HAL workaround."
 ---
 

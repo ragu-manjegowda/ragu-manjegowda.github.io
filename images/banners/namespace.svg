@@ -1,0 +1,21 @@
+---
+layout: banner
+description: "Two application routes, only one of which enters a VPN tunnel"
+---
+<g id="left" class="art">
+  <g transform="translate(24 108)">
+    <rect class="panel" width="175" height="97" rx="8"/>
+    <rect class="paper" x="11" y="11" width="153" height="72" rx="4"/>
+    <rect class="blue" x="24" y="25" width="44" height="39" rx="5"/><rect class="green" x="86" y="25" width="61" height="39" rx="5"/>
+    <path d="m34 36 7 7-7 7m13 1h9m49-2v-7a10 10 0 0 1 20 0v7"/><path class="paper" d="M102 46h26v12h-26z"/>
+    <path d="M-8 98h191l-9 8H2z"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(78 38)">
+    <rect class="paper" x="46" y="56" width="150" height="66" rx="13" stroke-dasharray="5 5"/>
+    <path class="detail" d="M16 51v-26h153"/><path class="accent" d="M16 63v26h152"/>
+    <circle class="panel" cx="16" cy="57" r="9"/><circle class="blue" cx="182" cy="25" r="10"/><circle class="green" cx="182" cy="89" r="10"/>
+    <text class="label" x="67" y="80">vpn</text><path d="m151 18 9 7-9 7m0 50 9 7-9 7"/>
+  </g>
+</g>

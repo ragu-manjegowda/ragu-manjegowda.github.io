@@ -1,0 +1,19 @@
+---
+layout: banner
+description: "Individual stars joined into two constellations"
+---
+<g id="left" class="art">
+  <circle class="paper detail" cx="130" cy="153" r="70"/>
+  <circle class="detail" cx="130" cy="153" r="60" stroke-dasharray="1 9"/>
+  <path d="m14 178 46-51 57 21 38-53 54 41 39-19m-131 31 20 58 72-70"/>
+  <g class="blue"><circle cx="14" cy="178" r="6"/><circle cx="60" cy="127" r="8"/><circle cx="155" cy="95" r="7"/><circle cx="248" cy="117" r="5"/></g>
+  <g class="green"><circle cx="117" cy="148" r="10"/><circle cx="209" cy="136" r="8"/><circle cx="137" cy="206" r="5"/></g>
+</g>
+<g id="right" class="art">
+  <circle class="paper detail" cx="185" cy="82" r="69"/>
+  <circle class="detail" cx="185" cy="82" r="59" stroke-dasharray="1 9"/>
+  <path d="m89 122 42-62 53 4 34 48 59-55m-93 7 49-37 44 30"/>
+  <g class="violet"><circle cx="89" cy="122" r="7"/><circle cx="131" cy="60" r="7"/><circle cx="218" cy="112" r="8"/><circle cx="233" cy="27" r="5"/></g>
+  <path class="green" d="m184 45 5 14 14 5-14 5-5 14-5-14-14-5 14-5z"/>
+  <circle class="blue" cx="277" cy="57" r="9"/>
+</g>

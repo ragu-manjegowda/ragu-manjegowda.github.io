@@ -2,7 +2,8 @@
 title: "Neovim as the Development Core: Fast, Extensible, and Keyboard-Driven"
 tags: [neovim, vim, productivity, linux, mac, workflow, lsp, lua, treesitter]
 categories: blog
-background-image: nvim.jpg
+image: /images/nvim.jpg
+banner: /images/banners/editor.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 5

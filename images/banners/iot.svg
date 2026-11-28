@@ -1,0 +1,19 @@
+---
+layout: banner
+description: "A connected microcontroller and a wireless cloud gateway"
+---
+<g id="left" class="art">
+  <g transform="translate(24 99)">
+    <rect class="green" width="182" height="112" rx="12"/>
+    <rect class="panel" x="52" y="31" width="64" height="51" rx="4"/>
+    <path d="M63 23v8m14-8v8m14-8v8m14-8v8M63 82v8m14-8v8m14-8v8m14-8v8M44 43h8m-8 13h8m-8 13h8m64-26h8m-8 13h8m-8 13h8"/>
+    <path class="detail" d="M16 26h14l8 11m91 39 12 12h23m-35-46 13-12h20"/>
+    <g class="paper"><circle cx="16" cy="14" r="4"/><circle cx="166" cy="98" r="4"/><circle cx="162" cy="30" r="4"/></g>
+  </g>
+</g>
+<g id="right" class="art">
+  <path class="blue" d="M139 101a27 27 0 0 1 6-53 39 39 0 0 1 75-5 29 29 0 1 1 5 58z"/>
+  <path class="accent" d="M180 85V52m-12 13 12-13 12 13"/>
+  <path class="detail" stroke-dasharray="4 6" d="M180 108v16h-58m58 0h58"/>
+  <rect class="panel" x="97" y="130" width="51" height="28" rx="5"/><rect class="green" x="213" y="130" width="51" height="28" rx="5"/>
+</g>

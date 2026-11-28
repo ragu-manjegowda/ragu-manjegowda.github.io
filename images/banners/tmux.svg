@@ -1,0 +1,19 @@
+---
+layout: banner
+description: "A terminal session split into panes and a session tree"
+---
+<g id="left" class="art">
+  <g transform="translate(12 84) rotate(-4 121 72)">
+    {% include banner/window.svg %}
+    <path class="green" d="M6 120h230v16H6z"/><path d="M127 26v93m0-47h112"/>
+    <path class="detail" d="m13 46 7 6-7 6m13 1h14m97-15h54m-54 45h47m-47 10h72"/>
+    <text class="label" x="13" y="133" font-size="10">0:shell  1:edit</text>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(87 42)">
+    <path d="M27 22v88h34m-34-44h34"/>
+    <rect class="panel" width="125" height="38" rx="6"/><rect class="green" x="61" y="49" width="125" height="34" rx="5"/><rect class="blue" x="61" y="93" width="125" height="34" rx="5"/>
+    <g class="label"><text x="15" y="25">session</text><text x="74" y="72">0:shell</text><text x="74" y="116">1:edit</text></g>
+  </g>
+</g>

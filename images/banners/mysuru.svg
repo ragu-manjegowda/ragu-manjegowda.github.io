@@ -1,0 +1,18 @@
+---
+layout: banner
+description: "A palace skyline and a city map on a phone"
+---
+<g id="left" class="art">
+  <path class="paper" d="M5 218v-60h28v-21h34v19h24v-31h63v31h24v-19h34v22h28v59z"/>
+  <path class="violet" d="M32 137q0-15 18-27 18 12 18 27zm58-12q0-19 32-39 32 20 32 39zm87 12q0-15 18-27 18 12 18 27z"/>
+  <path d="M50 110v-8m72-16v-13m73 37v-8M14 171h217"/>
+  <path class="blue" d="M30 218v-23q9-18 18 0v23m56 0v-28q18-31 36 0v28m56 0v-23q9-18 18 0v23"/>
+</g>
+<g id="right" class="art">
+  <g transform="translate(153 18) rotate(7 52 84)">
+    <rect class="panel" width="106" height="166" rx="13"/><rect class="green" x="8" y="18" width="90" height="128" rx="4"/>
+    <path class="paper" d="m9 108 27-28-27-24v-9l33 27 55-42v11L46 82l28 32 23-20v10l-23 19-34-35-31 31z"/>
+    <path class="blue" d="M48 60a14 14 0 1 1 28 0q0 10-14 24-14-14-14-24z"/><circle class="paper" cx="62" cy="59" r="4"/>
+    <path d="M42 10h22m-16 145h11"/>
+  </g>
+</g>

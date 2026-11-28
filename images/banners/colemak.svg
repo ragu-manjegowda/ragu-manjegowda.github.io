@@ -1,0 +1,18 @@
+---
+layout: banner
+description: "A staggered keyboard and the Colemak-DH home row"
+---
+<g id="left" class="art">
+  <g transform="translate(9 126) rotate(-6 119 45)">
+    {% include banner/keys.svg %}
+    <path class="green" d="M51 34h134v21H51z"/><path d="M78 34v21m27-21v21m27-21v21m27-21v21"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(58 53) rotate(5 116 55)">
+    <rect class="panel" width="233" height="89" rx="7"/>
+    <rect class="green" x="8" y="14" width="109" height="38" rx="5"/><rect class="blue" x="123" y="14" width="102" height="38" rx="5"/>
+    <g class="label" text-anchor="middle"><text x="63" y="38">A R S T</text><text x="174" y="38">N E I O</text></g>
+    <path class="detail" d="M29 66h62m54 0h60"/>
+  </g>
+</g>

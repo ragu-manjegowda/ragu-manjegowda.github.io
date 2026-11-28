@@ -2,7 +2,8 @@
 title: "A VPN That Only the Right Apps Use: Network Namespaces for Opt-In Access"
 tags: [linux, vpn, network-namespaces, ssh, awesomewm, networking, workflow]
 categories: blog
-background-image: vpn-namespace-panel-tooltip.png
+image: /images/vpn-namespace-panel-tooltip.png
+banner: /images/banners/namespace.svg
 excerpt: "How I keep my everyday connection outside the VPN, opt SSH and a browser into an isolated network namespace, and switch to host-wide routing only when a task needs it."
 ---
 

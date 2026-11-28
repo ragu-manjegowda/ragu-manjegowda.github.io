@@ -2,7 +2,8 @@
 title: "LETF Trades"
 tags: [trading, tqqq, tecl, letf]
 categories: blog
-background-image: stocks.jpg
+image: /images/stocks.jpg
+banner: /images/banners/candles.svg
 excerpt: "My leveraged ETF trades, updated daily."
 ---
 

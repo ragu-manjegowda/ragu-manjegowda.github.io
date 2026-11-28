@@ -1,0 +1,20 @@
+---
+layout: banner
+description: "A code buffer beside a modal editing command line"
+---
+<g id="left" class="art">
+  <g transform="translate(12 84) rotate(-4 121 72)">
+    {% include banner/window.svg %}
+    <path d="M38 25v119"/><path class="detail" d="M16 45h9m-9 17h9m-9 17h9m-9 17h9M51 45h72m-53 17h87m-87 17h57m-76 17h42"/>
+    <rect class="green" x="5" y="117" width="232" height="22" rx="3"/><text class="label" x="15" y="133">NORMAL</text>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(93 44) rotate(4 89 60)">
+    <path class="green" d="M0 17 25 0l76 85v39z"/>
+    <path class="blue" d="M0 17v91l25 17V47z"/>
+    <path class="violet" d="M77 4v76l24 29V20z"/>
+    <path class="detail" d="M125 42h49m-49 17h73m-73 17h41"/>
+    <text class="label" x="125" y="108">:wq</text>
+  </g>
+</g>

@@ -1,0 +1,19 @@
+---
+layout: banner
+description: "Stacked kernel memory pages and a boot console"
+---
+<g id="left" class="art">
+  <path class="violet" d="m15 176 95-43 99 43-95 45z"/>
+  <path class="blue" d="m15 150 95-43 99 43-95 45z"/>
+  <path class="green" d="m15 124 95-43 99 43-95 45z"/>
+  <path class="detail" d="m57 124 54-24 58 24-55 27z"/>
+  <path class="accent" d="m88 124 24-11 25 11-25 11z"/>
+</g>
+<g id="right" class="art">
+  <g transform="translate(62 30) rotate(4 121 72)">
+    {% include banner/window.svg %}
+    <text class="label" x="17" y="56">boot: vivitsa</text>
+    <path class="detail" d="M18 78h92m-92 14h121"/>
+    <path class="accent" d="m18 106 10 8-10 8m19 0h14"/>
+  </g>
+</g>

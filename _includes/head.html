@@ -18,28 +18,8 @@
   <meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
   <meta property="og:url" content="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
   <meta property="og:site_name" content="{{ site.title }}" />
-  {% comment %} Use post/page image, background-image, or site thumbnail as fallback {% endcomment %}
-  {% if page.image %}
-    {% assign og_image = page.image %}
-  {% elsif page.background-image %}
-    {% assign og_image = page.background-image %}
-  {% else %}
-    {% assign og_image = site.thumbnail %}
-  {% endif %}
-  {% comment %} Handle relative vs absolute image URLs {% endcomment %}
-  {% assign first_char = og_image | slice: 0 %}
-  {% if first_char == '/' %}
-    {% assign second_char = og_image | slice: 1 %}
-    {% if second_char == '/' %}
-      <meta property="og:image" content="{{ og_image }}" />
-    {% else %}
-      <meta property="og:image" content="{{ og_image | prepend: site.baseurl | prepend: site.url }}" />
-    {% endif %}
-  {% elsif og_image contains 'http' %}
-    <meta property="og:image" content="{{ og_image }}" />
-  {% else %}
-    <meta property="og:image" content="{{ og_image | prepend: '/images/' | prepend: site.baseurl | prepend: site.url }}" />
-  {% endif %}
+  {% assign og_image = page.image | default: site.thumbnail | absolute_url %}
+  <meta property="og:image" content="{{ og_image | escape }}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   {% if page.layout == 'post' %}
@@ -55,7 +35,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title }}{% endif %}" />
   <meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
-  <meta name="twitter:image" content="{% if first_char == '/' %}{% if second_char == '/' %}{{ og_image }}{% else %}{{ og_image | prepend: site.baseurl | prepend: site.url }}{% endif %}{% elsif og_image contains 'http' %}{{ og_image }}{% else %}{{ og_image | prepend: '/images/' | prepend: site.baseurl | prepend: site.url }}{% endif %}" />
+  <meta name="twitter:image" content="{{ og_image | escape }}" />
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
 
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
@@ -66,32 +46,8 @@
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
   <meta name="color-scheme" content="light dark" />
   <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}" />{%
-  if page.background-image %}{%
-    assign first_char = page.background-image | slice: 0 %}{%
-    if first_char == '/' %}{%
-      assign second_char = page.background-image | slice: 1 %}{%
-      if second_char == '/' %}{% comment %}                     // remote                 {% endcomment %}{%
-        assign imageurl = page.background-image %}{%
-      else %}{% comment %}                                      // local, not in /images/ {% endcomment %}{%
-        assign imageurl = page.background-image | prepend: site.baseurl %}{%
-      endif %}{%
-    else %}{% comment %}                                        // local, in /images/     {% endcomment %}{%
-      assign imageurl = page.background-image | prepend: "/images/" | prepend: site.baseurl %}{%
-    endif %}
-  <style>
-  #main > header {
-    {% if page.themed-banner %}
-    --banner-ink: var(--theme-fg-bold);
-    background-color: var(--theme-bg);
-    background-image: url("{{ imageurl }}");
-    {% else %}
-    background-image: -moz-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
-    background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
-    background-image: -ms-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
-    background-image: linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
-    {% endif %}
-  }
-  </style>{%
+  if page.banner %}
+  <style>:root { --banner-image: url("{{ page.banner | relative_url }}"); }</style>{%
   endif %}{%
   if page.style-includes %}{%
     for include in page.style-includes %}{%

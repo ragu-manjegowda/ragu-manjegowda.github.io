@@ -2,7 +2,8 @@
 title: "Solarized Theme + Darkman: Automatic Light/Dark Switching Across Your Entire Workflow"
 tags: [solarized, darkman, theming, linux, terminal, gtk, rofi, neovim, awesome, automation]
 categories: blog
-background-image: awesome.jpg
+image: /images/awesome.jpg
+banner: /images/banners/day-night.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 8

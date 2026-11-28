@@ -1,0 +1,20 @@
+---
+layout: banner
+description: "A candlestick series with a moving-average chart"
+---
+<g id="left" class="art">
+  <g transform="translate(12 84) rotate(-4 121 72)">
+    {% include banner/window.svg %}
+    <path class="detail" d="M17 41v83h210m-202-24h196m-196-30h196"/>
+    <g class="green"><path d="M41 83v33m56-57v47m55-54v39m48-54v34"/><path d="M34 91h14v15H34zm56-15h14v20H90zm55-14h14v16h-14zm48-17h14v15h-14z"/></g>
+    <g class="violet"><path d="M69 75v40m55-51v37m51-55v37"/><path d="M62 85h14v20H62zm55-13h14v17h-14zm51-18h14v18h-14z"/></g>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(88 51)">
+    <rect class="paper" width="193" height="101" rx="6"/>
+    <path class="detail" d="M15 15v72h166m-166-27h166m-166-26h166"/>
+    <path class="blue" d="m17 74 17-4 19 3 24-25 16 9 19-26 17 7 16-15 19 4 14-15v74H17z"/>
+    <path class="accent" d="M18 78q41-1 65-20t49-14 47-21"/>
+  </g>
+</g>

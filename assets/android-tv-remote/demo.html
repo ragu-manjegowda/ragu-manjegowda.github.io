@@ -10,20 +10,21 @@ options: [nomenu]
   <meta charset="utf-8">
   <meta name="author" content="Ragu Manjegowda (@ragu-manjegowda)">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Android TV Remote · Interactive demo</title>
   <style>
     :root {
-      color-scheme: dark;
-      --section: #073642; --card: #002b36; --ink: #eee8d5; --muted: #93a1a1;
-      --edge: #586e75; --accent: #859900; --danger: #ef897a;
-      --desktop: linear-gradient(130deg, #213735 8%, #454a46 48%, #263440 90%);
+      color-scheme: light dark;
+      --section: light-dark(#eee8d5, #073642);
+      --card: light-dark(#fdf6e3, #002b36);
+      --ink: light-dark(#073642, #eee8d5);
+      --muted: light-dark(#526970, #93a1a1);
+      --edge: light-dark(#839496, #586e75);
+      --accent: light-dark(#186aa5, #859900);
+      --danger: light-dark(#a22c24, #ef897a);
+      --desktop: linear-gradient(130deg, light-dark(#bcc9bb, #213735) 8%,
+        light-dark(#d6c7b6, #454a46) 48%, light-dark(#bdcad5, #263440) 90%);
       font: 15px/1.4 Inter, system-ui, sans-serif;
-    }
-    :root.light {
-      color-scheme: light;
-      --section: #eee8d5; --card: #fdf6e3; --ink: #073642; --muted: #526970;
-      --edge: #839496; --accent: #186aa5; --danger: #a22c24;
-      --desktop: linear-gradient(130deg, #bcc9bb 8%, #d6c7b6 48%, #bdcad5 90%);
     }
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
@@ -108,7 +109,7 @@ options: [nomenu]
   <aside class="preview-bar" aria-label="Preview controls">
     <a href="{{ site.baseurl }}{% post_url 2026-11-28-android-tv-remote %}">← Project write-up</a>
     <span>Try the tabs, themes, and sample TV states. No commands are sent.</span>
-    <button id="theme">Show light theme</button>
+    <button id="theme">Switch theme</button>
     <label>Sample state <select id="sample">
       <option value="ready">Connected</option><option value="pin">Shield requests PIN</option><option value="empty">No TV found</option>
     </select></label>
@@ -230,10 +231,23 @@ options: [nomenu]
         tabs[next].focus();
       };
     }
-    document.querySelector('#theme').onclick = event => {
-      const light = document.documentElement.classList.toggle('light');
-      event.currentTarget.textContent = light ? 'Show dark theme' : 'Show light theme';
+    const preferredDark = matchMedia('(prefers-color-scheme: dark)');
+    const themeButton = document.querySelector('#theme');
+    const rootStyle = document.documentElement.style;
+    function nextTheme() {
+      const current = rootStyle.colorScheme || (preferredDark.matches ? 'dark' : 'light');
+      return current === 'dark' ? 'light' : 'dark';
+    }
+    function updateThemeLabel() {
+      themeButton.textContent = 'Show ' + nextTheme() + ' theme';
+    }
+    themeButton.onclick = () => {
+      const choice = nextTheme();
+      rootStyle.colorScheme = choice === (preferredDark.matches ? 'dark' : 'light') ? '' : choice;
+      updateThemeLabel();
     };
+    preferredDark.addEventListener('change', updateThemeLabel);
+    updateThemeLabel();
     document.querySelector('#sample').onchange = event => {
       const state = event.currentTarget.value;
       for (const name of ['ready', 'pin', 'empty', 'connected']) {

@@ -2,7 +2,8 @@
 title: "My tmux Setup: A Terminal Multiplexer for Keyboard-Driven Development"
 tags: [tmux, terminal, workflow, productivity, linux, mac]
 categories: blog
-background-image: tmux.png
+image: /images/tmux.png
+banner: /images/banners/tmux.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 4

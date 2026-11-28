@@ -1,0 +1,17 @@
+---
+layout: banner
+description: "An addressed postcard and a paper plane in flight"
+---
+<g id="left" class="art">
+  <g transform="translate(16 115) rotate(-7 100 53)">
+    <rect class="paper" width="210" height="108" rx="5"/>
+    <rect class="green" x="155" y="9" width="43" height="33" rx="2"/>
+    <path class="detail" d="M106 16v76m17-37h60m-60 13h52m-52 14h44M15 35q16-12 32-2t32-2m-64 12q16-12 32-2t32-2"/>
+    <circle cx="154" cy="38" r="14"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <path class="detail" stroke-dasharray="5 7" d="M35 152q58-42 85-10t-4 30q-21-5 3-27l67-57"/>
+  <path class="blue" d="m160 66 128-40-49 99-25-32-32 20 6-30z"/>
+  <path class="green" d="m188 83 100-57-74 67-32 20z"/>
+</g>

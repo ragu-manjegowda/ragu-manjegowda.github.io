@@ -2,7 +2,8 @@
 title: "NeoMutt: Terminal-Native Email for the Keyboard-Driven Developer"
 tags: [neomutt, email, terminal, productivity, linux, notmuch, mbsync, msmtp, oauth2, imap, vim]
 categories: blog
-background-image: neomutt.jpg
+image: /images/neomutt.jpg
+banner: /images/banners/mail.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 6

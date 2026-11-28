@@ -1,0 +1,16 @@
+---
+layout: banner
+description: "A terminal inbox and a sealed envelope"
+---
+<g id="left" class="art">
+  <g transform="translate(12 84) rotate(-4 121 72)">
+    {% include banner/window.svg %}
+    <rect class="green" x="8" y="45" width="226" height="20" rx="2"/>
+    <path class="detail" d="M19 55h17m13 0h67m24 0h52M19 78h17m13 0h53m38 0h75M19 101h17m13 0h72m19 0h44"/>
+    <path class="accent" d="M12 120h64"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(106 47) rotate(8 86 50)">{% include banner/envelope.svg %}<circle class="green" cx="86" cy="59" r="10"/></g>
+  <path class="detail" d="M62 76h31m-42 14h39m-20 14h17"/>
+</g>

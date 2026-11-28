@@ -3,7 +3,8 @@ priority: 0.6
 title: Heart Rate Measurement Device
 excerpt: using IR sensors
 categories: projects
-background-image: heartRate.jpg
+image: /images/heartRate.jpg
+banner: /images/banners/pulse.svg
 tags:
   - C
   - Atmel

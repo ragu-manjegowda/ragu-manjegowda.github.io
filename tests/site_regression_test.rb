@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'nokogiri'
 require 'uri'
 require 'yaml'
 
@@ -18,6 +19,15 @@ class SiteRegressionTest < Minitest::Test
 		assert_path_exists File.join(SITE, 'feed.xml')
 		assert_includes read_site('feed.xml'), '<feed'
 		assert_includes read_site('robots.txt'), "Sitemap: https://ragu-manjegowda.github.io/sitemap.xml\n"
+	end
+
+	def test_feed_thumbnails_resolve_to_published_images
+		feed = Nokogiri::XML(read_site('feed.xml'))
+		thumbnails = feed.xpath('//media:thumbnail/@url', 'media' => 'http://search.yahoo.com/mrss/')
+		refute_empty thumbnails
+		thumbnails.each do |url|
+			assert_path_exists File.join(SITE, URI.parse(url.value).path)
+		end
 	end
 
 	def test_jekyll_excludes_ci_dependency_and_tooling_directories

@@ -1,0 +1,22 @@
+---
+layout: banner
+description: "An exploded assembly and its dimensioned plan"
+---
+<g id="left" class="art">
+  <g transform="translate(35 76)">
+    <path class="detail" stroke-dasharray="4 6" d="M0 39v80m77-120v80m77-40v80m-77 0v42"/>
+    <path class="violet" d="m0 111 77-38 77 38-77 39z"/>
+    <path class="blue" d="m0 75 77-38 77 38-77 39z"/>
+    <path class="green" d="m0 39 77-38 77 38-77 39z"/>
+    <path class="paper" d="m51 39 26-13 26 13-26 14z"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(83 30)">
+    <rect class="panel" width="204" height="142" rx="3"/>
+    <path class="detail" d="M16 115h172M16 128h58m12 0h24m30-13v27"/>
+    <rect class="blue" x="40" y="34" width="116" height="56" rx="8"/>
+    <circle class="paper" cx="63" cy="62" r="12"/><circle class="paper" cx="133" cy="62" r="12"/>
+    <path d="M40 23h116M40 18v10m116-10v10m14 6v56m-5-56h10m-10 56h10"/>
+  </g>
+</g>

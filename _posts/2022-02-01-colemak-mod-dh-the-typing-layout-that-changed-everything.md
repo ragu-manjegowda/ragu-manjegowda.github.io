@@ -2,7 +2,8 @@
 title: "Colemak Mod-DH: The Typing Layout That Changed Everything"
 tags: [keyboard, ergonomic, colemak, mod-dh, layout, vim, hjkl, touch-typing]
 categories: blog
-background-image: colemak-mod-dh-ansi.png
+image: /images/colemak-mod-dh-ansi.png
+banner: /images/banners/colemak.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 3

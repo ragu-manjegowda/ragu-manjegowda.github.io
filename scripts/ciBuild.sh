@@ -21,11 +21,11 @@ build_site() {
 }
 
 run_site_tests() {
-  ruby -I tests tests/site_regression_test.rb
+  bundle exec ruby -I tests tests/site_regression_test.rb
 }
 
 run_theme_tests() {
-  ruby -I tests tests/theme_contract_test.rb
+  bundle exec ruby -I tests tests/theme_contract_test.rb
 }
 
 run_http_check() {

@@ -1,0 +1,16 @@
+---
+layout: banner
+description: "The same horizon by sunlight and moonlight"
+---
+<g id="left" class="art">
+  <g transform="translate(100 139)">
+    <circle class="green" r="32"/>
+    <path class="accent" d="M0-47v-14m0 108v14m47-61h14m-108 0h-14m28-33-10-10m76 76 10 10m-10-76 10-10m-76 76-10 10"/>
+  </g>
+  <path class="blue" d="M0 201q52-26 111-5t117-1l40 15q-57 22-121 5T0 219z"/>
+</g>
+<g id="right" class="art">
+  <path class="violet" d="M211 38a49 49 0 1 0 42 74 45 45 0 0 1-42-74z"/>
+  <path class="detail" d="M131 44v12m-6-6h12m139 12v10m-5-5h10"/>
+  <path class="blue" d="M58 159q54-25 108-4t115 0l28-5v16q-72 24-129 5t-122-2z"/>
+</g>

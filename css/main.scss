@@ -2299,9 +2299,9 @@ $baseurl: '{{ site.baseurl }}/images';
 	#main {
 		> header {
 			@include padding(12em, 0);
-			@include vendor('background-image', ('linear-gradient(top, rgba(0,0,0,0.3), rgba(0,0,0,0.3))', 'url("#{$baseurl}/banner.jpg")'));
-			background-attachment: inherit;
-			background-position: top center;
+			background-color: var(--theme-bg);
+			background-image: var(--banner-image);
+			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
 			text-align: center;
@@ -2341,14 +2341,6 @@ $baseurl: '{{ site.baseurl }}/images';
 					font-size: _font(hdr-size-mlarge);
 					margin: 0 0 (_size(element-margin) * 0.5) 0;
 				}
-			}
-		}
-	}
-
-	body.is-mobile {
-		#main {
-			> header {
-				background-attachment: scroll;
 			}
 		}
 	}
@@ -2967,7 +2959,10 @@ pre code,
 #main > header h1,
 #main > header h2,
 #main > header p {
-	color: var(--banner-ink, #eee8d5);
+	color: var(--theme-fg-bold);
+	margin-inline: auto;
+	max-width: min(60%, 52rem);
+	text-wrap: balance;
 }
 
 #main > .demo-header p {
@@ -3023,7 +3018,9 @@ body.landing #banner .more {
 
 @include breakpoint(small) {
 	#main > header {
-		@include padding(4em, 3em);
+		padding: max(4em, 22vw) 1.5em;
+
+		h1, h2, p { max-width: 100%; }
 	}
 }
 

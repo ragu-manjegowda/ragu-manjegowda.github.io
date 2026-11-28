@@ -1,4 +1,6 @@
 require 'minitest/autorun'
+require 'nokogiri'
+require 'uri'
 
 class ThemeContractTest < Minitest::Test
 	ROOT = File.expand_path('..', __dir__)
@@ -60,14 +62,18 @@ class ThemeContractTest < Minitest::Test
 		assert_equal '#073642', dark_variables['--theme-group-bg']
 	end
 
-	def test_fixed_light_foreground_is_used_for_image_backed_landing_surfaces
-		assert_declaration 'body.landing #banner h1', 'color', '#eee8d5'
-		assert_declaration 'body.landing #banner p', 'color', '#eee8d5'
-		assert_declaration 'body.landing #header.alt nav>ul>li>a.menuToggle', 'color', '#eee8d5'
-		assert_declaration 'body.landing .spotlight h2', 'color', '#eee8d5'
-		assert_declaration 'body.landing .spotlight p', 'color', '#eee8d5'
-		assert_declaration 'body.landing #cta header h2', 'color', '#eee8d5'
-		assert_declaration 'body.landing #cta header p', 'color', '#eee8d5'
+	def test_landing_keeps_its_original_photograph_and_light_foreground
+		home = Nokogiri::HTML(File.read(File.join(ROOT, '_site/index.html')))
+		assert home.at_css('body.landing #banner')
+		refute_includes home.css('head style').text, '--banner-image'
+		assert_path_exists File.join(ROOT, '_site/images/banner.jpg')
+		['body.landing #page-wrapper', 'body.is-mobile.landing #banner', 'body.is-mobile.landing .wrapper.style4'].each do |selector|
+			assert blocks.any? { |selectors, css| selectors.include?(selector) && css.include?('/images/banner.jpg') }, selector
+		end
+		['#banner h1', '#banner p', '#banner .more', '#header.alt nav>ul>li>a.menuToggle',
+		 '.spotlight h2', '.spotlight p', '#cta header h2', '#cta header p'].each do |selector|
+			assert_declaration "body.landing #{selector}", 'color', '#eee8d5'
+		end
 	end
 
 	def test_theme_panel_text_contrast_is_safe_in_both_color_schemes
@@ -76,18 +82,63 @@ class ThemeContractTest < Minitest::Test
 		assert_operator contrast('#eee8d5', '#002b36'), :>=, 4.5
 	end
 
-	def test_remote_banner_contrast_in_both_schemes
-		banner = File.read(File.join(ROOT, '_site/images/android-tv-remote-banner.svg'))
-		post = File.read(File.join(ROOT, '_site/projects/android-tv-remote.html'))
-		assert_match %r{background-image:\s*url\("/images/android-tv-remote-banner\.svg"\)}, post
-		assert_includes post, '--banner-ink: var(--theme-fg-bold)'
-		assert_any_declaration '#main>header h1', 'color', 'var(--banner-ink, #eee8d5)'
-		[[root_variables, root_variables(banner)], [dark_variables, dark_variables(banner)]].each do |site, art|
-			%w[--wall --wall-edge].each do |background|
-				assert_operator contrast(site.fetch('--theme-fg-bold'), art.fetch(background)), :>=, 4.5
-			end
-			assert_operator contrast(art.fetch('--ink'), art.fetch('--key-face')), :>=, 4.5
+	def test_portfolio_pages_keep_bitmap_previews_and_interior_pages_use_svg_banners
+		assert_any_declaration '#main>header', 'background-image', 'var(--banner-image)'
+		site = File.join(ROOT, '_site')
+		paths = Dir.glob(File.join(site, '**/*.html')).reject { |path| path.start_with?(File.join(site, 'assets/')) }
+		banners = []
+		paths.each do |path|
+			page = Nokogiri::HTML(File.read(path))
+			next unless page.at_css('#page-wrapper')
+
+			social = page.at_css('meta[property="og:image"]')['content']
+			assert_match(/\.(?:png|jpe?g)\z/i, social, path)
+			assert_path_exists File.join(site, URI.parse(social).path)
+			assert_equal social, page.at_css('meta[name="twitter:image"]')['content']
+			next if path == File.join(site, 'index.html')
+
+			assert page.at_css('#main > header'), path
+			url = page.css('head style').text[/--banner-image:\s*url\("([^"]+\.svg)"\)/, 1]
+			refute_nil url, path
+			assert_path_exists File.join(site, url)
+			banners << url
 		end
+		assert_includes banners, '/images/android-tv-remote-banner.svg'
+		assert_equal Dir.glob(File.join(site, 'images/banners/*.svg')).sort,
+			banners.uniq.grep(%r{/images/banners/}).map { |url| File.join(site, url) }.sort
+	end
+
+	def test_standalone_banners_have_resolved_artwork_and_contrast_in_both_schemes
+		assert_any_declaration '#main>header h1', 'color', 'var(--theme-fg-bold)'
+		Dir.glob(File.join(ROOT, '_site/images/{banners/*.svg,android-tv-remote-banner.svg}')).each do |path|
+			banner = Nokogiri::XML(File.read(path)) { |config| config.strict.nonet }
+			banner.remove_namespaces!
+			assert_equal 'svg', banner.root.name, path
+			refute_empty banner.at_xpath('/svg/title').text, path
+			%w[left right].each do |side|
+				assert banner.at_xpath("//g[@id='#{side}']/*"), path
+				assert banner.at_xpath("/svg/svg/use[@href='##{side}']"), path
+			end
+			banner.xpath('//use').each do |use|
+				assert banner.at_xpath("//*[@id='#{use['href'].delete_prefix('#')}']"), path
+			end
+			style = banner.at_xpath('/svg/style').text
+			[[root_variables, root_variables(style)], [dark_variables, dark_variables(style)]].each do |site, art|
+				%w[--wall --wall-edge].each do |background|
+					assert_operator contrast(site.fetch('--theme-fg-bold'), art.fetch(background)), :>=, 4.5, path
+				end
+				assert_operator contrast(art.fetch('--ink'), art.fetch('--key-face')), :>=, 4.5, path
+			end
+		end
+	end
+
+	def test_remote_demo_uses_system_colors_before_javascript_runs
+		demo = Nokogiri::HTML(File.read(File.join(ROOT, '_site/projects/android-tv-remote/demo/index.html')))
+		assert_equal 'light dark', demo.at_css('meta[name="color-scheme"]')['content']
+		style = demo.at_css('style').text
+		assert_match(/:root\s*\{\s*color-scheme:\s*light dark;/, style)
+		assert_match(/--card:\s*light-dark\(#fdf6e3, #002b36\)/, style)
+		assert demo.at_css('button#theme')
 	end
 
 	def test_post_content_surfaces_have_solarized_contrast_tokens

@@ -1,0 +1,17 @@
+---
+layout: banner
+description: "The two key wells and thumb clusters of a split keyboard"
+---
+<g id="well">
+  <path class="panel" d="M0 33Q0 20 15 16l116-15q14-1 21 15l10 36 32 25q7 6 2 16l-15 27q-4 9-16 6L20 109Q1 106 0 90z"/>
+  <path class="paper" d="m13 31 119-15 18 59-128 12z"/>
+  <path class="detail" d="m37 28 10 56m14-58 11 56m13-59 12 56m12-59 13 57M17 50l120-14M20 69l124-13"/>
+  <path class="green" d="m141 82 13-18 31 24-12 21z"/><path d="m156 94 13-19"/>
+  <path class="blue" d="m23 94 84-7 18 20-98-8z"/>
+</g>
+<g id="left" class="art">
+  <use xlink:href="#well" transform="translate(4 117) rotate(-7 95 50)"/>
+</g>
+<g id="right" class="art">
+  <use xlink:href="#well" transform="translate(296 42) rotate(7) scale(-1 1)"/>
+</g>

@@ -1,0 +1,21 @@
+---
+layout: banner
+description: "An optical pulse sensor and a waveform readout"
+---
+<g id="left" class="art">
+  <g transform="translate(22 102)">
+    <rect class="green" width="182" height="108" rx="11"/>
+    <circle class="panel" cx="14" cy="14" r="4"/><circle class="panel" cx="168" cy="94" r="4"/>
+    <rect class="paper" x="24" y="28" width="91" height="41" rx="6"/>
+    <circle class="violet" cx="47" cy="48" r="11"/><circle class="blue" cx="91" cy="48" r="11"/>
+    <path class="detail" d="M40 78v9h74l12-12h23M122 37h15l9 11h15"/>
+    <path class="accent" d="m47 29 16-17 24 17"/>
+  </g>
+</g>
+<g id="right" class="art">
+  <g transform="translate(62 30) rotate(4 121 72)">
+    {% include banner/window.svg %}
+    <path class="detail" d="M16 60h210m-210 32h210m-210 31h210M48 40v86m43-86v86m43-86v86m42-86v86"/>
+    <path class="accent" stroke-width="4" d="M16 101h21q8-3 15-32t15 4q5 13 11 7t9 10l7 11h24q8-3 15-32t15 4q5 13 11 7t9 10l7 11h31"/>
+  </g>
+</g>

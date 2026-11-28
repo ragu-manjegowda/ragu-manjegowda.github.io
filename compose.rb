@@ -146,13 +146,11 @@ end
 
 puts <<-eoc
 
-If you want an image in the banner, put the image in the /images folder
-and type the name here. If it's in another folder, prefix the image with
-'/' and the folder name, such as /unique/images/mine.jpg. For no image,
-just hit Enter.
+Choose a themed SVG from /images (for example, /images/banners/journal.svg).
+Press Enter to use the journal banner.
 eoc
-back = getinput("background-image")
-back = back == '' ? nil : back
+banner = getinput("Banner", "/images/banners/journal.svg")
+banner = "/images/banners/journal.svg" if banner.empty?
 
 puts <<-eoc
 
@@ -208,7 +206,7 @@ else
     categories.each do |cat|
       f.puts "  - " + cat
     end
-    if (back) then f.puts "background-image: " + back end
+    f.puts "banner: " + banner
     f.puts "#date/lastmod are optional"
     f.puts "#date: " + tstamp
     f.puts "#lastmod: " + tstamp

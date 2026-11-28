@@ -2,7 +2,8 @@
 title: "Kinesis Advantage360 Pro: My Setup & Workflow"
 tags: [keyboard, ergonomic, kinesis, adv360, colemak, mod-dh, macros, mouse-emulation]
 categories: blog
-background-image: kinesis-adv360-pro.jpg
+image: /images/kinesis-adv360-pro.jpg
+banner: /images/banners/split-keyboard.svg
 series: keyboard-driven-development
 series_title: "Keyboard-Driven Development"
 series_order: 2
