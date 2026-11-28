@@ -114,7 +114,7 @@ I am intentionally leaving this post unexplained—I don't have enough real-worl
     <button class="chart-fullscreen-button" type="button">Full screen</button>
   </div>
   <div class="chart-container">
-    <iframe src="/assets/charts/tqqq_ema_chart.html" title="TQQQ EMA chart" allowfullscreen></iframe>
+    <iframe src="{{ '/assets/letf/tqqq_ema_chart.html' | relative_url }}" title="TQQQ EMA chart" allowfullscreen></iframe>
   </div>
 </div>
 
@@ -127,7 +127,7 @@ I am intentionally leaving this post unexplained—I don't have enough real-worl
     <button class="chart-fullscreen-button" type="button">Full screen</button>
   </div>
   <div class="chart-container">
-    <iframe src="/assets/charts/tecl_ema_chart.html" title="TECL EMA chart" allowfullscreen></iframe>
+    <iframe src="{{ '/assets/letf/tecl_ema_chart.html' | relative_url }}" title="TECL EMA chart" allowfullscreen></iframe>
   </div>
 </div>
 
@@ -140,7 +140,7 @@ I am intentionally leaving this post unexplained—I don't have enough real-worl
     <button class="chart-fullscreen-button" type="button">Full screen</button>
   </div>
   <div class="chart-container">
-    <iframe src="/assets/charts/tecl_from_tqqq_ema_chart.html" title="TECL from TQQQ signals chart" allowfullscreen></iframe>
+    <iframe src="{{ '/assets/letf/tecl_from_tqqq_ema_chart.html' | relative_url }}" title="TECL from TQQQ signals chart" allowfullscreen></iframe>
   </div>
 </div>
 

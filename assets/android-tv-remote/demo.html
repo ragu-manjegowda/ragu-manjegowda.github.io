@@ -1,0 +1,248 @@
+---
+layout: null
+title: Android TV Remote interactive demo
+permalink: /projects/android-tv-remote/demo/
+options: [nomenu]
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Ragu Manjegowda (@ragu-manjegowda)">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android TV Remote · Interactive demo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --section: #073642; --card: #002b36; --ink: #eee8d5; --muted: #93a1a1;
+      --edge: #586e75; --accent: #859900; --danger: #ef897a;
+      --desktop: linear-gradient(130deg, #213735 8%, #454a46 48%, #263440 90%);
+      font: 15px/1.4 Inter, system-ui, sans-serif;
+    }
+    :root.light {
+      color-scheme: light;
+      --section: #eee8d5; --card: #fdf6e3; --ink: #073642; --muted: #526970;
+      --edge: #839496; --accent: #186aa5; --danger: #a22c24;
+      --desktop: linear-gradient(130deg, #bcc9bb 8%, #d6c7b6 48%, #bdcad5 90%);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; min-height: 100vh; background: var(--desktop) fixed; color: var(--ink); }
+    :where(button, input, select) { font: inherit; color: inherit; }
+    button, input, select {
+      min-height: 2.25rem; padding: .35rem .7rem; border: 1px solid var(--edge);
+      border-radius: 8px; background: var(--card);
+    }
+    button:not(:disabled):hover { border-color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    button:disabled { color: var(--muted); border-style: dashed; }
+    .preview-bar {
+      display: flex; align-items: center; flex-wrap: wrap; gap: .5rem;
+      background: var(--card); border-bottom: 1px solid var(--edge); padding: 6px 16px;
+      font-size: .8rem; color: var(--muted);
+    }
+    a { color: var(--ink); }
+    .preview-bar span { margin-right: auto; }
+    .preview-bar :is(button, select) { min-height: 1.7rem; padding: 1px 8px; }
+    main { padding: 16px; }
+    nav {
+      display: inline-flex; gap: 3px; background: var(--section); border-radius: 12px;
+      border: 1px solid var(--edge); padding: 4px; margin-bottom: 10px;
+    }
+    nav button { border-color: transparent; background: transparent; }
+    nav button[aria-selected="true"] { background: var(--card); border-color: var(--accent); font-weight: 650; }
+    [role="tabpanel"], .sections { display: grid; gap: 10px; }
+    .section {
+      min-width: 0; padding: 12px; background: var(--section);
+      border: 1px solid var(--edge); border-radius: 16px;
+    }
+    .section h2, .card h3 { margin: 0; font-size: 1rem; }
+    .section h2 { margin-bottom: .55rem; }
+    .card { min-width: 0; padding: 10px; border: 1px solid var(--edge); border-radius: 10px; background: var(--card); }
+    .card h3 { font-size: .9rem; }
+    .card p { margin: .25rem 0 0; }
+    .muted, small { color: var(--muted); }
+    .row, .section-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .row { flex-wrap: wrap; }
+    .section-header { margin-bottom: .55rem; }
+    .section-header h2 { margin: 0; }
+    .section-header button { min-height: 1.9rem; }
+    .grid-buttons { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; gap: 6px; }
+    .card button { background: var(--section); }
+    .navigation { display: flex; flex-direction: column; min-height: max(16rem, 31vh); }
+    .navigation-cards { flex: 1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 10px; }
+    .nav-card { display: flex; flex-direction: column; gap: 6px; }
+    .dpad { flex: 1; display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); gap: 4px; }
+    .dpad button { min-width: 0; }
+    .up, .down { grid-column: 2; } .left { grid-column: 1; }
+    .pad {
+      flex: 1; min-height: 6rem; display: grid; place-items: center; text-align: center;
+      padding: 6px; border: 1px solid var(--edge); border-radius: 8px; background: var(--section);
+    }
+    .media { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+    .stop { grid-column: 1 / -1; }
+    .keyboard input { width: 100%; }
+    .pin { display: flex; gap: 6px; }
+    .pin input { min-width: 0; flex: 1; }
+    input::placeholder { color: var(--muted); }
+    .state { font-size: .85rem; border-left: 3px solid var(--accent); padding-left: .5rem; }
+    .danger { color: var(--danger); }
+    .stack { display: grid; gap: 8px; }
+    footer {
+      margin-top: 10px; display: inline-block; padding: 4px 10px; border-radius: 8px;
+      color: var(--muted); background: var(--section); font-size: .85rem;
+    }
+    @media (min-width: 52rem) { .sections { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 38rem) {
+      main { padding: 10px; } .section { padding: 10px; }
+      .navigation-cards { gap: 6px; } .nav-card { padding: 7px; }
+      .grid-buttons button, .media button { padding-inline: 2px; }
+    }
+    @media (max-width: 28rem) {
+      .navigation-cards { grid-template-columns: 1fr; }
+      .media { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <aside class="preview-bar" aria-label="Preview controls">
+    <a href="{{ site.baseurl }}{% post_url 2026-11-28-android-tv-remote %}">← Project write-up</a>
+    <span>Try the tabs, themes, and sample TV states. No commands are sent.</span>
+    <button id="theme">Show light theme</button>
+    <label>Sample state <select id="sample">
+      <option value="ready">Connected</option><option value="pin">Shield requests PIN</option><option value="empty">No TV found</option>
+    </select></label>
+  </aside>
+  <main>
+    <nav role="tablist" aria-label="Android TV Remote">
+      <button id="tab-devices" role="tab" aria-controls="devices" aria-selected="false" tabindex="-1">Devices</button>
+      <button id="tab-remote" role="tab" aria-controls="remote" aria-selected="true">Remote</button>
+      <button id="tab-settings" role="tab" aria-controls="settings" aria-selected="false" tabindex="-1">Settings</button>
+    </nav>
+
+    <div id="devices" role="tabpanel" aria-labelledby="tab-devices" hidden>
+      <section class="section">
+        <div class="section-header"><h2>Available TVs</h2><button>Refresh</button></div>
+        <div class="card row" data-connected>
+          <div><h3>Living room Shield</h3><small>192.0.2.20</small></div>
+          <span class="state">Connected</span>
+        </div>
+        <div class="card" data-empty hidden>
+          <h3>No TVs found</h3><p class="muted">Refresh to scan again, or connect by IP below.</p>
+        </div>
+      </section>
+      <section class="section">
+        <h2>Connection actions</h2>
+        <div class="grid-buttons"><button>Connect by IP</button><button id="re-pair">Re-pair selected TV</button></div>
+      </section>
+    </div>
+
+    <div id="remote" role="tabpanel" aria-labelledby="tab-remote">
+      <section class="section navigation">
+        <h2>Navigation</h2>
+        <div class="navigation-cards">
+          <div class="card nav-card">
+            <h3>D-pad</h3>
+            <div class="dpad">
+              <button class="up" aria-label="Up">▲</button><button class="left" aria-label="Left">◀</button>
+              <button>OK</button><button aria-label="Right">▶</button><button class="down" aria-label="Down">▼</button>
+            </div>
+            <div class="grid-buttons"><button>Back</button><button>Home</button><button>Menu</button></div>
+          </div>
+          <div class="card nav-card">
+            <h3>Trackpad</h3>
+            <div class="pad"><span data-ready>Click to control the TV cursor</span><span data-pin hidden>Enter the PIN shown on your Shield.</span><span data-empty hidden>Connect to a TV to use the trackpad.</span></div>
+            <div class="grid-buttons" id="mouse-buttons"><button>Left click</button><button>Right click</button></div>
+            <div class="pin" data-pin hidden><input aria-label="Sample Shield PIN" placeholder="Shield PIN" type="password" autocomplete="off"><button>Pair</button></div>
+            <small>Verified on NVIDIA Shield TV with PIN pairing.</small>
+          </div>
+        </div>
+      </section>
+      <div class="sections">
+        <section class="section">
+          <h2>Power &amp; channels</h2>
+          <div class="grid-buttons"><button>Power</button><button>CH +</button><button>CH −</button></div>
+        </section>
+        <section class="section">
+          <h2>Volume</h2>
+          <div class="grid-buttons"><button>Vol −</button><button>Mute</button><button>Vol +</button></div>
+        </section>
+      </div>
+      <section class="section">
+        <h2>Playback</h2>
+        <div class="media">
+          <button aria-label="Previous">⏮</button><button aria-label="Rewind">◀◀</button>
+          <button aria-label="Play">▶</button><button aria-label="Pause">Ⅱ</button>
+          <button aria-label="Fast forward">▶▶</button><button aria-label="Next">⏭</button>
+          <button class="stop">■ Stop</button>
+        </div>
+      </section>
+      <section class="section keyboard">
+        <h2><label for="tv-text">Keyboard input</label></h2>
+        <input id="tv-text" placeholder="Type text for the TV…" autocomplete="off">
+      </section>
+    </div>
+
+    <div id="settings" role="tabpanel" aria-labelledby="tab-settings" hidden>
+      <section class="section">
+        <h2>Active connection</h2>
+        <div class="card row">
+          <div data-connected><h3>Living room Shield</h3><small>192.0.2.20</small></div>
+          <span class="state" data-ready>Remote connected · Trackpad ready</span>
+          <span class="state" data-pin hidden>Remote connected · Trackpad needs PIN</span>
+          <div data-empty hidden><h3>No active connection</h3><p class="muted">Choose a TV in Devices to get started.</p></div>
+        </div>
+      </section>
+      <section class="section">
+        <h2>Pairing &amp; recovery</h2>
+        <div class="stack">
+          <div class="card row">
+            <div><h3>Shield trackpad</h3><p class="muted">Forget the mouse pairing for this Shield only.</p></div>
+            <button id="forget">Forget trackpad</button>
+          </div>
+          <div class="card row">
+            <div><h3>Android TV Remote pairings</h3><p class="muted">Disconnect and require fresh pairing with every TV.</p></div>
+            <button class="danger">Clear all remote pairings…</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer><span data-connected>Connected to Living room Shield</span><span data-empty hidden>No TV connected</span> · <a href="{{ '/assets/android-tv-remote/LICENSE.txt' | relative_url }}">Preview license</a></footer>
+  </main>
+  <script>
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    function selectTab(selected) {
+      for (const tab of tabs) {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        document.getElementById(tab.getAttribute('aria-controls')).hidden = !active;
+      }
+    }
+    for (const [index, tab] of tabs.entries()) {
+      tab.onclick = () => selectTab(tab);
+      tab.onkeydown = event => {
+        const next = { ArrowLeft: (index + tabs.length - 1) % tabs.length,
+                       ArrowRight: (index + 1) % tabs.length, Home: 0, End: tabs.length - 1 }[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        selectTab(tabs[next]);
+        tabs[next].focus();
+      };
+    }
+    document.querySelector('#theme').onclick = event => {
+      const light = document.documentElement.classList.toggle('light');
+      event.currentTarget.textContent = light ? 'Show dark theme' : 'Show light theme';
+    };
+    document.querySelector('#sample').onchange = event => {
+      const state = event.currentTarget.value;
+      for (const name of ['ready', 'pin', 'empty', 'connected']) {
+        const visible = name === 'connected' ? state !== 'empty' : state === name;
+        for (const element of document.querySelectorAll('[data-' + name + ']')) element.hidden = !visible;
+      }
+      for (const control of document.querySelectorAll('#remote button, #tv-text, #re-pair')) control.disabled = state === 'empty';
+      for (const control of document.querySelectorAll('#mouse-buttons button, #forget')) control.disabled = state !== 'ready';
+    };
+  </script>
+</body>
+</html>

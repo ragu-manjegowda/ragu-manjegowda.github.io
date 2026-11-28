@@ -2965,12 +2965,28 @@ pre code,
 }
 
 #main > header h1,
-#main > header h2 {
-	color: #eee8d5;
+#main > header h2,
+#main > header p {
+	color: var(--banner-ink, #eee8d5);
 }
 
-#main > header p {
-	color: #eee8d5;
+#main > .demo-header p {
+	max-width: 34em;
+	margin-inline: auto;
+}
+
+.demo-header .button {
+	background: var(--theme-fg-bold);
+	color: var(--theme-bg);
+	max-width: 100%;
+	padding-inline: 1.25em;
+}
+
+.demo-header .button:hover,
+.demo-header .button:focus-visible {
+	background: var(--theme-bg);
+	color: var(--theme-fg-bold);
+	outline: 2px solid currentColor;
 }
 
 body.landing #banner h1 {

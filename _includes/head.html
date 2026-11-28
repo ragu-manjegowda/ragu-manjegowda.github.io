@@ -80,10 +80,16 @@
     endif %}
   <style>
   #main > header {
+    {% if page.themed-banner %}
+    --banner-ink: var(--theme-fg-bold);
+    background-color: var(--theme-bg);
+    background-image: url("{{ imageurl }}");
+    {% else %}
     background-image: -moz-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
     background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
     background-image: -ms-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
     background-image: linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ imageurl }}");
+    {% endif %}
   }
   </style>{%
   endif %}{%

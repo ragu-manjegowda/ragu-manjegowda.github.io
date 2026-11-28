@@ -27,12 +27,12 @@ class ThemeContractTest < Minitest::Test
 			"Expected #{selector} to declare #{property}: #{value}"
 	end
 
-	def root_variables
-		@root_variables ||= CSS.match(/:root\s*\{([^}]+)\}/m)[1].scan(/(--[\w-]+):\s*([^;]+);/).to_h
+	def root_variables(stylesheet = CSS)
+		stylesheet.match(/:root\s*\{([^}]+)\}/m)[1].scan(/(--[\w-]+):\s*([^;]+);/).to_h
 	end
 
-	def dark_variables
-		@dark_variables ||= CSS.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([^}]+)\}/m)[1].scan(/(--[\w-]+):\s*([^;]+);/).to_h
+	def dark_variables(stylesheet = CSS)
+		stylesheet.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([^}]+)\}/m)[1].scan(/(--[\w-]+):\s*([^;]+);/).to_h
 	end
 
 	def rgb(hex)
@@ -74,6 +74,20 @@ class ThemeContractTest < Minitest::Test
 		assert_operator contrast(root_variables['--theme-fg-bold'], root_variables['--theme-group-bg']), :>=, 4.5
 		assert_operator contrast(dark_variables['--theme-fg-bold'], dark_variables['--theme-group-bg']), :>=, 4.5
 		assert_operator contrast('#eee8d5', '#002b36'), :>=, 4.5
+	end
+
+	def test_remote_banner_contrast_in_both_schemes
+		banner = File.read(File.join(ROOT, '_site/images/android-tv-remote-banner.svg'))
+		post = File.read(File.join(ROOT, '_site/projects/android-tv-remote.html'))
+		assert_match %r{background-image:\s*url\("/images/android-tv-remote-banner\.svg"\)}, post
+		assert_includes post, '--banner-ink: var(--theme-fg-bold)'
+		assert_any_declaration '#main>header h1', 'color', 'var(--banner-ink, #eee8d5)'
+		[[root_variables, root_variables(banner)], [dark_variables, dark_variables(banner)]].each do |site, art|
+			%w[--wall --wall-edge].each do |background|
+				assert_operator contrast(site.fetch('--theme-fg-bold'), art.fetch(background)), :>=, 4.5
+			end
+			assert_operator contrast(art.fetch('--ink'), art.fetch('--key-face')), :>=, 4.5
+		end
 	end
 
 	def test_post_content_surfaces_have_solarized_contrast_tokens

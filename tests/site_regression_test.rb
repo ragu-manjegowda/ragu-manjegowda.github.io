@@ -75,6 +75,23 @@ class SiteRegressionTest < Minitest::Test
 		refute_match %r{<a\b[^>]*style="[^"]*white-space:\s*nowrap}i, blog
 	end
 
+	def test_android_tv_remote_project_links_to_a_standalone_demo
+		post = '/projects/android-tv-remote.html'
+		demo = '/projects/android-tv-remote/demo/'
+		assert_includes read_site('projects/index.html'), %(href="#{post}")
+		header = read_site(post)[/<article\b[^>]*>\s*<header\b[^>]*>(.*?)<\/header>/m, 1]
+		refute_nil header
+		assert_includes header, %(href="#{demo}")
+
+		preview = read_site(demo + 'index.html')
+		assert_includes preview, %(href="#{post}")
+		assert_equal 1, preview.scan(/<!doctype html>/i).length
+		%w[devices remote settings].each do |tab|
+			assert_includes preview, %(aria-controls="#{tab}")
+			assert_includes preview, %(id="#{tab}" role="tabpanel")
+		end
+	end
+
 	def test_external_link_normalizer_is_shipped_for_markdown_links
 		main_js = read_site('js/main.js')
 

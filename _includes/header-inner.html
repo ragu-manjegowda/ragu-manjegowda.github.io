@@ -1,9 +1,11 @@
-  <header>
+  <header{% if page.demo_url %} class="demo-header"{% endif %}>
     <h1>{{ page.title }}{%
     if page.options contains 'minihead' %}
     <span class="excerpt-inline"> - {{ page.excerpt }}</span></h1>{%
     else %}</h1>
     <p>{{ page.excerpt }}</p>{%
-    endif %}
+    endif %}{% if page.demo_url %}
+    <a class="button" href="{{ page.demo_url | relative_url }}">Try the interactive demo</a>
+    {% endif %}
   </header>
   {% include breadcrumb.html %}
