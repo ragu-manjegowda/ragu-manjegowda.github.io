@@ -46,9 +46,6 @@ if [ ! -f ./compose.rb ]; then
     exit 1
 fi
 
-# Delete old build
-rm -rf ./_site
-
 echo -e "${GREEN}Build mode: ${YELLOW}$MODE${NC}"
 
 if [ "$MODE" = "docker" ]; then
@@ -82,6 +79,7 @@ if [ "$MODE" = "docker" ]; then
             DOCKER_PORT_ARGS=()
         fi
 
+        rm -rf ./_site
         docker run --rm \
             "${DOCKER_NETWORK_ARGS[@]}" \
             "${DOCKER_PORT_ARGS[@]}" \
@@ -101,12 +99,19 @@ fi
 if [ "$MODE" = "local" ]; then
     echo "Running Jekyll locally..."
 
-    # Check if bundler is installed locally
-    if ! command -v bundler &> /dev/null; then
-        echo -e "${RED}Bundler could not be found${NC}"
-        echo -e "${YELLOW}Please install Ruby and Bundler first${NC}"
+    if ! command -v ruby >/dev/null; then
+        echo "Ruby is not on PATH. Install Ruby and RubyGems before running the local preview." >&2
         exit 1
     fi
+    if ! command -v bundle >/dev/null; then
+        if gem_bin=$(ruby -rrubygems -e 'print File.join(Gem.user_dir, "bin")') && [[ -x "$gem_bin/bundle" ]]; then
+            export PATH="$gem_bin:$PATH"
+        else
+            echo "Bundler was not found for $(ruby -v). Run: gem install --user-install bundler" >&2
+            exit 1
+        fi
+    fi
+    export BUNDLE_PATH="${BUNDLE_PATH:-vendor/bundle}"
 
     # Install dependencies only if gems are not installed
     if ! bundle check &> /dev/null; then
@@ -119,6 +124,7 @@ if [ "$MODE" = "local" ]; then
     # Serve on localhost with Select-based event selector
     # (liburing.so.2 may not be available in all environments)
     export IO_EVENT_SELECTOR=Select
+    rm -rf ./_site
     echo -e "${GREEN}Open ${YELLOW}${LOCAL_URL}${NC}${GREEN} in your browser.${NC}"
     bundle exec jekyll serve --incremental --host "localhost"
 

@@ -25,13 +25,15 @@ by [@ajlkn](http://twitter.com/ajlkn) and Jekyll theme by
 
    - b. Native
 
-        Install ruby and bundler on your local machine then,
-
-        From the repo's root directory run,
+        Install Ruby and RubyGems, then run the following from the repo root:
 
         ```
-        $ bundle exec jekyll serve --incremental
+        $ gem install --user-install bundler
+        $ bash scripts/run.sh --local
         ```
+        The script also checks RubyGems' user bin directory for Bundler if
+        your shell hasn't picked it up yet. It installs the site's gems in
+        `vendor/bundle` by default; set `BUNDLE_PATH` to use another location.
         Open a browser and navigate to http://localhost:4000 (or the port number that jekyll 
         indicates to open)
 
